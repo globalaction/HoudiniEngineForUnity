@@ -40,46 +40,46 @@ using UnityEditor;
 namespace HoudiniEngineUnity
 {
 
-    /// <summary>
-    /// Base class for platform-specific functionaltiy.
-    /// </summary>
+	/// <summary>
+	/// Base class for platform-specific functionaltiy.
+	/// </summary>
 #if UNITY_EDITOR && HOUDINIENGINEUNITY_ENABLED
     [InitializeOnLoad]
 #endif
-    public class HEU_Platform
-    {
+	public class HEU_Platform
+	{
 #pragma warning disable 0414
-	private static string _lastErrorMsg;
+		private static string _lastErrorMsg;
 #pragma warning restore 0414
 
-	private static string _libPath = null;
+		private static string _libPath = null;
 
-	public static string LibPath
-	{
-	    get { return _libPath; }
-	}
+		public static string LibPath
+		{
+			get { return _libPath; }
+		}
 
-	private static bool _pathSet = false;
+		private static bool _pathSet = false;
 
-	public static bool IsPathSet
-	{
-	    get { return _pathSet; }
-	}
+		public static bool IsPathSet
+		{
+			get { return _pathSet; }
+		}
 
 
-	static HEU_Platform()
-	{
-	    // This gets set whenever Unity initializes or there is a code refresh.
-            SetHapiClientName();
-	    SetHoudiniEnginePath();
-	}
+		static HEU_Platform()
+		{
+			// This gets set whenever Unity initializes or there is a code refresh.
+			SetHapiClientName();
+			SetHoudiniEnginePath();
+		}
 
-	/// <summary>
-	/// Returns the path to the Houdini Engine plugin installation.
-	/// </summary>
-	/// <returns>Path to the Houdini Engine plugin installation.</returns>
-	public static string GetHoudiniEnginePath()
-	{
+		/// <summary>
+		/// Returns the path to the Houdini Engine plugin installation.
+		/// </summary>
+		/// <returns>Path to the Houdini Engine plugin installation.</returns>
+		public static string GetHoudiniEnginePath()
+		{
 #if UNITY_EDITOR_WIN || (!UNITY_EDITOR && UNITY_STANDALONE_WIN)
 	    // Limiting only to Windows since unable to dynamically load HAPI libs
 	    // with relative custom paths for now.
@@ -92,15 +92,15 @@ namespace HoudiniEngineUnity
 	    }
 #endif
 
-	    return GetHoudiniEngineDefaultPath();
-	}
+			return GetHoudiniEngineDefaultPath();
+		}
 
-	/// <summary>
-	/// Returns the default installation path of Houdini that this plugin was built to use.
-	/// </summary>
-	public static string GetHoudiniEngineDefaultPath()
-	{
-	    string HAPIPath = null;
+		/// <summary>
+		/// Returns the default installation path of Houdini that this plugin was built to use.
+		/// </summary>
+		public static string GetHoudiniEngineDefaultPath()
+		{
+			string HAPIPath = null;
 
 #if UNITY_EDITOR_WIN || (!UNITY_EDITOR && UNITY_STANDALONE_WIN)
 
@@ -143,66 +143,66 @@ namespace HoudiniEngineUnity
 		HAPIPath = HEU_HoudiniVersion.HOUDINI_INSTALL_PATH;
 	    }
 #else
-	    _lastErrorMsg = "Unable to find Houdini installation because this is an unsupported platform!";
+			_lastErrorMsg = "Unable to find Houdini installation because this is an unsupported platform!";
 #endif
 
-	    return HAPIPath;
-	}
-
-	/// <summary>
-	/// Return the saved Houdini install path.
-	/// Checks if the plugin has been updated, and if so, asks
-	/// user whether they want to switch to new version.
-	/// If user switches, then this returns null to allow installed version
-	/// to be used.
-	/// </summary>
-	/// <returns>The saved Houdini install path or null if it doesn't 
-	/// exist or user wants to use installed version</returns>
-	public static string GetSavedHoudiniPath()
-	{
-	    string HAPIPath = HEU_PluginSettings.HoudiniInstallPath;
-	    if (!string.IsNullOrEmpty(HAPIPath))
-	    {
-		// First check if the last stored installed Houdini version matches current installed version
-		string lastHoudiniVersion = HEU_PluginSettings.LastHoudiniVersion;
-		if (!string.IsNullOrEmpty(lastHoudiniVersion))
-		{
-		    if (!lastHoudiniVersion.Equals(HEU_HoudiniVersion.HOUDINI_VERSION_STRING))
-		    {
-			// Mismatch means different version of the plugin has been installed.
-			// Ask user if they want to update their HAPIPath.
-			// Confirmation means to clear out the saved HAPI path and use
-			// the default one specified by the plugin.
-			string title = "Updated Houdini Engine Plugin Detected";
-			string msg = string.Format("You have overriden the plugin's default Houdini version with your own, but the plugin has been updated.\n" +
-				"Would you like to use the updated plugin's default Houdini version?.");
-			if (HEU_EditorUtility.DisplayDialog(title, msg, "Yes", "No"))
-			{
-			    HEU_PluginSettings.HoudiniInstallPath = "";
-			    HAPIPath = null;
-			}
-
-			// Always update LastHoudiniVersion so this doesn't keep asking
-			HEU_PluginSettings.LastHoudiniVersion = HEU_HoudiniVersion.HOUDINI_VERSION_STRING;
-		    }
+			return HAPIPath;
 		}
-	    }
-	    return HAPIPath;
-	}
 
-        /// <summary>
-        /// Sets the HAPI_CLIENT_NAME environment variable
-        public static void SetHapiClientName()
-        {
-            System.Environment.SetEnvironmentVariable(
-                HEU_HAPIConstants.HAPI_ENV_CLIENT_NAME, "unity");
-        }
+		/// <summary>
+		/// Return the saved Houdini install path.
+		/// Checks if the plugin has been updated, and if so, asks
+		/// user whether they want to switch to new version.
+		/// If user switches, then this returns null to allow installed version
+		/// to be used.
+		/// </summary>
+		/// <returns>The saved Houdini install path or null if it doesn't 
+		/// exist or user wants to use installed version</returns>
+		public static string GetSavedHoudiniPath()
+		{
+			string HAPIPath = HEU_PluginSettings.HoudiniInstallPath;
+			if (!string.IsNullOrEmpty(HAPIPath))
+			{
+				// First check if the last stored installed Houdini version matches current installed version
+				string lastHoudiniVersion = HEU_PluginSettings.LastHoudiniVersion;
+				if (!string.IsNullOrEmpty(lastHoudiniVersion))
+				{
+					if (!lastHoudiniVersion.Equals(HEU_HoudiniVersion.HOUDINI_VERSION_STRING))
+					{
+						// Mismatch means different version of the plugin has been installed.
+						// Ask user if they want to update their HAPIPath.
+						// Confirmation means to clear out the saved HAPI path and use
+						// the default one specified by the plugin.
+						string title = "Updated Houdini Engine Plugin Detected";
+						string msg = string.Format("You have overriden the plugin's default Houdini version with your own, but the plugin has been updated.\n" +
+							"Would you like to use the updated plugin's default Houdini version?.");
+						if (HEU_EditorUtility.DisplayDialog(title, msg, "Yes", "No"))
+						{
+							HEU_PluginSettings.HoudiniInstallPath = "";
+							HAPIPath = null;
+						}
 
-	/// <summary>
-	/// Find the Houdini Engine libraries, and add the Houdini Engine path to the system path.
-	/// </summary>
-	public static void SetHoudiniEnginePath()
-	{
+						// Always update LastHoudiniVersion so this doesn't keep asking
+						HEU_PluginSettings.LastHoudiniVersion = HEU_HoudiniVersion.HOUDINI_VERSION_STRING;
+					}
+				}
+			}
+			return HAPIPath;
+		}
+
+		/// <summary>
+		/// Sets the HAPI_CLIENT_NAME environment variable
+		public static void SetHapiClientName()
+		{
+			System.Environment.SetEnvironmentVariable(
+				HEU_HAPIConstants.HAPI_ENV_CLIENT_NAME, "unity");
+		}
+
+		/// <summary>
+		/// Find the Houdini Engine libraries, and add the Houdini Engine path to the system path.
+		/// </summary>
+		public static void SetHoudiniEnginePath()
+		{
 #if HOUDINIENGINEUNITY_ENABLED
 	    if (_pathSet)
 	    {
@@ -296,287 +296,287 @@ namespace HoudiniEngineUnity
 #endif
 
 #endif
-	}
-
-	/// <summary>
-	/// Return all folders (their full paths) in given path as semicolon delimited string.
-	/// </summary>
-	/// <param name="path">Path to parse.</param>
-	/// <returns>Paths of all folders under given path.</returns>
-	public static string GetAllFoldersInPath(string path)
-	{
-	    if (!Directory.Exists(path))
-	    {
-		return "";
-	    }
-
-	    // Using StringBuilder as its much more memory efficient than regular strings for concatenation.
-	    StringBuilder pathBuilder = new StringBuilder();
-	    GetAllFoldersInPathHelper(path, pathBuilder);
-	    return pathBuilder.ToString();
-	}
-
-	/// <summary>
-	/// Helper that uses StringBuilder to build up the paths of all folders in given path.
-	/// </summary>
-	/// <param name="inPath">Path to parse.</param>
-	/// <param name="pathBuilder">StringBuilder to add results to.</param>
-	private static void GetAllFoldersInPathHelper(string inPath, StringBuilder pathBuilder)
-	{
-	    if (Directory.Exists(inPath))
-	    {
-		pathBuilder.Append(inPath);
-
-		DirectoryInfo dirInfo = new DirectoryInfo(inPath);
-		foreach (DirectoryInfo childDir in dirInfo.GetDirectories())
-		{
-		    pathBuilder.Append(";");
-		    pathBuilder.Append(GetAllFoldersInPath(childDir.FullName));
 		}
-	    }
-	}
 
-	/// <summary>
-	/// Returns all files (with their paths) in a given folder, with or without pattern, either recursively or just the first.
-	/// </summary>
-	/// <param name="folderPath">Path to folder</param>
-	/// <param name="searchPattern">File name pattern to search for</param>
-	/// <param name="bRecursive">Search all directories or just the top</param>
-	/// <returns>Array of file paths found or null if error</returns>
-	public static string[] GetFilesInFolder(string folderPath, string searchPattern, bool bRecursive)
-	{
-	    try
-	    {
-		return Directory.GetFiles(folderPath, searchPattern, bRecursive ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories);
-	    }
-	    catch (Exception ex)
-	    {
-		HEU_Logger.LogErrorFormat("Getting files in directory {0} threw exception: {1}", folderPath, ex);
-		return null;
-	    }
-	}
-
-	public static string GetFileName(string path)
-	{
-	    return Path.GetFileName(path);
-	}
-
-	public static string GetFileNameWithoutExtension(string path)
-	{
-	    return Path.GetFileNameWithoutExtension(path);
-	}
-
-	/// <summary>
-	/// Removes file name and returns the path containing just the folders.
-	/// </summary>
-	/// <param name="path"></param>
-	/// <returns></returns>
-	public static string GetFolderPath(string path, bool bRemoveDirectorySeparatorAtEnd = false)
-	{
-	    string resultPath = path;
-
-	    string fileName = Path.GetFileName(path);
-	    if (!string.IsNullOrEmpty(fileName))
-	    {
-		resultPath = path.Replace(fileName, "");
-	    }
-
-	    if (bRemoveDirectorySeparatorAtEnd)
-	    {
-		resultPath = resultPath.TrimEnd('\\', '/');
-	    }
-
-	    return resultPath;
-	}
-
-	/// <summary>
-	/// Returns path separator character.
-	/// </summary>
-	public static char DirectorySeparator
-	{
-	    // Instead of returning Path.DirectorySeparator, we'll use /
-	    // since all our platforms support it and to keep it consistent.
-	    // This way any saved paths in the project will work on all platforms.
-	    get { return '/'; }
-	}
-
-	/// <summary>
-	/// Returns path separator string.
-	/// </summary>
-	public static string DirectorySeparatorStr
-	{
-	    // Instead of returning Path.DirectorySeparator, we'll use /
-	    // since all our platforms support it and to keep it consistent.
-	    // This way any saved paths in the project will work on all platforms.
-	    get { return "/"; }
-	}
-
-	/// <summary>
-	/// Given a list of folders, builds a platform-compatible
-	/// path, using a separator in between the arguments.
-	/// Assumes folder arguments are given in order from left to right.
-	/// eg. folder1/folder2/args[0]/args[1]/...
-	/// </summary>
-	/// <param name="str1"></param>
-	/// <param name="str2"></param>
-	/// <param name="args"></param>
-	/// <returns>Returns platform-compatible path of given folders</returns>
-	public static string BuildPath(string folder1, string folder2, params object[] args)
-	{
-	    char separator = DirectorySeparator;
-
-	    StringBuilder sb = new StringBuilder();
-	    sb.Append(folder1);
-	    sb.Append(separator);
-	    sb.Append(folder2);
-
-	    for (int i = 0; i < args.Length; ++i)
-	    {
-		sb.Append(separator);
-		sb.Append(args[i]);
-	    }
-
-	    return sb.ToString();
-	}
-
-	/// <summary>
-	/// Removes and returns the last directory separator character from given string.
-	/// </summary>
-	/// <param name="inPath">Path to parse</param>
-	/// <returns>Returns the last directory separator character from given string</returns>
-	public static string TrimLastDirectorySeparator(string inPath)
-	{
-	    return inPath.TrimEnd(new char[] { DirectorySeparator });
-	}
-
-	public static bool DoesPathExist(string inPath)
-	{
-	    return File.Exists(inPath) || Directory.Exists(inPath);
-	}
-
-	public static bool DoesFileExist(string inPath)
-	{
-	    return File.Exists(inPath);
-	}
-
-	public static bool DoesDirectoryExist(string inPath)
-	{
-	    return Directory.Exists(inPath);
-	}
-
-	public static bool CreateDirectory(string inPath)
-	{
-	    DirectoryInfo dirInfo = Directory.CreateDirectory(inPath);
-	    if (dirInfo != null)
-	    {
-		return dirInfo.Exists;
-	    }
-	    return false;
-	}
-
-	public static string GetParentDirectory(string inPath)
-	{
-	    return Directory.GetParent(inPath).FullName;
-	}
-
-	public static string GetFullPath(string inPath)
-	{
-	    return Path.GetFullPath(inPath);
-	}
-
-	public static bool IsPathRooted(string inPath)
-	{
-	    return Path.IsPathRooted(inPath);
-	}
-
-	public static void WriteBytes(string path, byte[] bytes)
-	{
-	    File.WriteAllBytes(path, bytes);
-	}
-
-	public static bool WriteAllText(string path, string text)
-	{
-	    try
-	    {
-		File.WriteAllText(path, text);
-		return true;
-	    }
-	    catch (System.Exception ex)
-	    {
-		HEU_Logger.LogErrorFormat("Unable to save session to file: {0}. Exception: {1}", text, ex.ToString());
-	    }
-	    return false;
-	}
-
-	public static string ReadAllText(string path)
-	{
-	    try
-	    {
-		if (File.Exists(path))
+		/// <summary>
+		/// Return all folders (their full paths) in given path as semicolon delimited string.
+		/// </summary>
+		/// <param name="path">Path to parse.</param>
+		/// <returns>Paths of all folders under given path.</returns>
+		public static string GetAllFoldersInPath(string path)
 		{
-		    return File.ReadAllText(path);
+			if (!Directory.Exists(path))
+			{
+				return "";
+			}
+
+			// Using StringBuilder as its much more memory efficient than regular strings for concatenation.
+			StringBuilder pathBuilder = new StringBuilder();
+			GetAllFoldersInPathHelper(path, pathBuilder);
+			return pathBuilder.ToString();
 		}
-	    }
-	    catch (System.Exception ex)
-	    {
-		HEU_Logger.LogErrorFormat("Unable to load from file: {0}. Exception: {1}", path, ex.ToString());
-	    }
-	    return "";
-	}
 
-	/// <summary>
-	/// Returns environment value of given key, if found.
-	/// </summary>
-	/// <param name="key">Key to get the environment value for</param>
-	/// <returns>Environment value as string, or empty if none found</returns>
-	public static string GetEnvironmentValue(string key)
-	{
-	    string value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.Machine);
-	    if (string.IsNullOrEmpty(value))
-	    {
-		value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.User);
-	    }
-
-	    if (string.IsNullOrEmpty(value))
-	    {
-		value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.Process);
-	    }
-
-	    return value;
-	}
-
-	public static string GetHoudiniEngineEnvironmentFilePathFull()
-	{
-	    string envPath = HEU_PluginSettings.HoudiniEngineEnvFilePath;
-
-	    if (!HEU_Platform.IsPathRooted(envPath))
-	    {
-		envPath = HEU_AssetDatabase.GetAssetFullPath(envPath);
-	    }
-
-	    return HEU_Platform.DoesFileExist(envPath) ? envPath : "";
-	}
-
-	public static bool LoadFileIntoMemory(string path, out byte[] buffer)
-	{
-	    buffer = null;
-	    try
-	    {
-		if (File.Exists(path))
+		/// <summary>
+		/// Helper that uses StringBuilder to build up the paths of all folders in given path.
+		/// </summary>
+		/// <param name="inPath">Path to parse.</param>
+		/// <param name="pathBuilder">StringBuilder to add results to.</param>
+		private static void GetAllFoldersInPathHelper(string inPath, StringBuilder pathBuilder)
 		{
-		    buffer = File.ReadAllBytes(path);
+			if (Directory.Exists(inPath))
+			{
+				pathBuilder.Append(inPath);
+
+				DirectoryInfo dirInfo = new DirectoryInfo(inPath);
+				foreach (DirectoryInfo childDir in dirInfo.GetDirectories())
+				{
+					pathBuilder.Append(";");
+					pathBuilder.Append(GetAllFoldersInPath(childDir.FullName));
+				}
+			}
 		}
-		else
+
+		/// <summary>
+		/// Returns all files (with their paths) in a given folder, with or without pattern, either recursively or just the first.
+		/// </summary>
+		/// <param name="folderPath">Path to folder</param>
+		/// <param name="searchPattern">File name pattern to search for</param>
+		/// <param name="bRecursive">Search all directories or just the top</param>
+		/// <returns>Array of file paths found or null if error</returns>
+		public static string[] GetFilesInFolder(string folderPath, string searchPattern, bool bRecursive)
 		{
-		    HEU_Logger.LogErrorFormat("Failed to open (0}. File doesn't exist!", path);
+			try
+			{
+				return Directory.GetFiles(folderPath, searchPattern, bRecursive ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories);
+			}
+			catch (Exception ex)
+			{
+				HEU_Logger.LogErrorFormat("Getting files in directory {0} threw exception: {1}", folderPath, ex);
+				return null;
+			}
 		}
-	    }
-	    catch(Exception ex)
-	    {
-		HEU_Logger.LogErrorFormat("Failed to open (0}. Exception: {1}", path, ex.ToString());
-	    }
-	    return buffer != null;
+
+		public static string GetFileName(string path)
+		{
+			return Path.GetFileName(path);
+		}
+
+		public static string GetFileNameWithoutExtension(string path)
+		{
+			return Path.GetFileNameWithoutExtension(path);
+		}
+
+		/// <summary>
+		/// Removes file name and returns the path containing just the folders.
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static string GetFolderPath(string path, bool bRemoveDirectorySeparatorAtEnd = false)
+		{
+			string resultPath = path;
+
+			string fileName = Path.GetFileName(path);
+			if (!string.IsNullOrEmpty(fileName))
+			{
+				resultPath = path.Replace(fileName, "");
+			}
+
+			if (bRemoveDirectorySeparatorAtEnd)
+			{
+				resultPath = resultPath.TrimEnd('\\', '/');
+			}
+
+			return resultPath;
+		}
+
+		/// <summary>
+		/// Returns path separator character.
+		/// </summary>
+		public static char DirectorySeparator
+		{
+			// Instead of returning Path.DirectorySeparator, we'll use /
+			// since all our platforms support it and to keep it consistent.
+			// This way any saved paths in the project will work on all platforms.
+			get { return '/'; }
+		}
+
+		/// <summary>
+		/// Returns path separator string.
+		/// </summary>
+		public static string DirectorySeparatorStr
+		{
+			// Instead of returning Path.DirectorySeparator, we'll use /
+			// since all our platforms support it and to keep it consistent.
+			// This way any saved paths in the project will work on all platforms.
+			get { return "/"; }
+		}
+
+		/// <summary>
+		/// Given a list of folders, builds a platform-compatible
+		/// path, using a separator in between the arguments.
+		/// Assumes folder arguments are given in order from left to right.
+		/// eg. folder1/folder2/args[0]/args[1]/...
+		/// </summary>
+		/// <param name="str1"></param>
+		/// <param name="str2"></param>
+		/// <param name="args"></param>
+		/// <returns>Returns platform-compatible path of given folders</returns>
+		public static string BuildPath(string folder1, string folder2, params object[] args)
+		{
+			char separator = DirectorySeparator;
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append(folder1);
+			sb.Append(separator);
+			sb.Append(folder2);
+
+			for (int i = 0; i < args.Length; ++i)
+			{
+				sb.Append(separator);
+				sb.Append(args[i]);
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Removes and returns the last directory separator character from given string.
+		/// </summary>
+		/// <param name="inPath">Path to parse</param>
+		/// <returns>Returns the last directory separator character from given string</returns>
+		public static string TrimLastDirectorySeparator(string inPath)
+		{
+			return inPath.TrimEnd(new char[] { DirectorySeparator });
+		}
+
+		public static bool DoesPathExist(string inPath)
+		{
+			return File.Exists(inPath) || Directory.Exists(inPath);
+		}
+
+		public static bool DoesFileExist(string inPath)
+		{
+			return File.Exists(inPath);
+		}
+
+		public static bool DoesDirectoryExist(string inPath)
+		{
+			return Directory.Exists(inPath);
+		}
+
+		public static bool CreateDirectory(string inPath)
+		{
+			DirectoryInfo dirInfo = Directory.CreateDirectory(inPath);
+			if (dirInfo != null)
+			{
+				return dirInfo.Exists;
+			}
+			return false;
+		}
+
+		public static string GetParentDirectory(string inPath)
+		{
+			return Directory.GetParent(inPath).FullName;
+		}
+
+		public static string GetFullPath(string inPath)
+		{
+			return Path.GetFullPath(inPath);
+		}
+
+		public static bool IsPathRooted(string inPath)
+		{
+			return Path.IsPathRooted(inPath);
+		}
+
+		public static void WriteBytes(string path, byte[] bytes)
+		{
+			File.WriteAllBytes(path, bytes);
+		}
+
+		public static bool WriteAllText(string path, string text)
+		{
+			try
+			{
+				File.WriteAllText(path, text);
+				return true;
+			}
+			catch (System.Exception ex)
+			{
+				HEU_Logger.LogErrorFormat("Unable to save session to file: {0}. Exception: {1}", text, ex.ToString());
+			}
+			return false;
+		}
+
+		public static string ReadAllText(string path)
+		{
+			try
+			{
+				if (File.Exists(path))
+				{
+					return File.ReadAllText(path);
+				}
+			}
+			catch (System.Exception ex)
+			{
+				HEU_Logger.LogErrorFormat("Unable to load from file: {0}. Exception: {1}", path, ex.ToString());
+			}
+			return "";
+		}
+
+		/// <summary>
+		/// Returns environment value of given key, if found.
+		/// </summary>
+		/// <param name="key">Key to get the environment value for</param>
+		/// <returns>Environment value as string, or empty if none found</returns>
+		public static string GetEnvironmentValue(string key)
+		{
+			string value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.Machine);
+			if (string.IsNullOrEmpty(value))
+			{
+				value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.User);
+			}
+
+			if (string.IsNullOrEmpty(value))
+			{
+				value = System.Environment.GetEnvironmentVariable(key, System.EnvironmentVariableTarget.Process);
+			}
+
+			return value;
+		}
+
+		public static string GetHoudiniEngineEnvironmentFilePathFull()
+		{
+			string envPath = HEU_PluginSettings.HoudiniEngineEnvFilePath;
+
+			if (!HEU_Platform.IsPathRooted(envPath))
+			{
+				envPath = HEU_AssetDatabase.GetAssetFullPath(envPath);
+			}
+
+			return HEU_Platform.DoesFileExist(envPath) ? envPath : "";
+		}
+
+		public static bool LoadFileIntoMemory(string path, out byte[] buffer)
+		{
+			buffer = null;
+			try
+			{
+				if (File.Exists(path))
+				{
+					buffer = File.ReadAllBytes(path);
+				}
+				else
+				{
+					HEU_Logger.LogErrorFormat("Failed to open (0}. File doesn't exist!", path);
+				}
+			}
+			catch (Exception ex)
+			{
+				HEU_Logger.LogErrorFormat("Failed to open (0}. Exception: {1}", path, ex.ToString());
+			}
+			return buffer != null;
+		}
 	}
-    }
 
 }   // HoudiniEngineUnity

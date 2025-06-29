@@ -40,15 +40,15 @@ using HoudiniEngineUnity;
 /// </summary>
 public class HEU_ScriptParameterExample : MonoBehaviour
 {
-    // Instance the Evergreen HDA in the scene, and set its gameobject to here
-    public GameObject _evergreenGameObject;
+	// Instance the Evergreen HDA in the scene, and set its gameobject to here
+	public GameObject _evergreenGameObject;
 
-    // Reference to the actual HEU_HoduiniAsset
-    private HEU_HoudiniAsset _evergreenAsset;
+	// Reference to the actual HEU_HoduiniAsset
+	private HEU_HoudiniAsset _evergreenAsset;
 
-    public float _updateRate = 0.1f;
+	public float _updateRate = 0.1f;
 
-    public float _scale = 20f;
+	public float _scale = 20f;
 
 
 #if HOUDINIENGINEUNITY_ENABLED

@@ -35,11 +35,11 @@ using System.Text;
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Windows-specific platform functionality.
-    /// </summary>
-    public static class HEU_PlatformWin
-    {
+	/// <summary>
+	/// Windows-specific platform functionality.
+	/// </summary>
+	public static class HEU_PlatformWin
+	{
 #if UNITY_EDITOR_WIN || (!UNITY_EDITOR && UNITY_STANDALONE_WIN)
 
 	public enum RegSAM
@@ -194,6 +194,6 @@ namespace HoudiniEngineUnity
 	}
 
 #endif
-    }
+	}
 
 }   // HoudiniEngineUnity

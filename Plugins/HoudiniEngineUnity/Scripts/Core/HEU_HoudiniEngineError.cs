@@ -27,29 +27,29 @@
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Houdini Engine base error class.
-    /// </summary>
-    public class HEU_HoudiniEngineError : System.Exception
-    {
-	protected string _errorMsg = "Unknown Error";
-
-
-	public HEU_HoudiniEngineError()
+	/// <summary>
+	/// Houdini Engine base error class.
+	/// </summary>
+	public class HEU_HoudiniEngineError : System.Exception
 	{
+		protected string _errorMsg = "Unknown Error";
 
-	}
 
-	internal HEU_HoudiniEngineError(string errorMsg)
-	{
-	    _errorMsg = errorMsg;
-	}
+		public HEU_HoudiniEngineError()
+		{
 
-	public override string ToString()
-	{
-	    return _errorMsg;
+		}
+
+		internal HEU_HoudiniEngineError(string errorMsg)
+		{
+			_errorMsg = errorMsg;
+		}
+
+		public override string ToString()
+		{
+			return _errorMsg;
+		}
 	}
-    }
 
 
 }   // HoudiniEngineUnity

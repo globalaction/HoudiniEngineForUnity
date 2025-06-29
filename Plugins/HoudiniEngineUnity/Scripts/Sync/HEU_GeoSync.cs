@@ -38,37 +38,37 @@ using UnityEditor;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_NodeId = System.Int32;
-    using HAPI_PartId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_NodeId = System.Int32;
+	using HAPI_PartId = System.Int32;
 
-    /// <summary>
-    /// Lightweight Unity geometry generator for Houdini geometry.
-    /// Given already loaded geometry buffers, creates corresponding Unity geometry.
-    /// </summary>
-    public class HEU_GeoSync : HEU_BaseSync
-    {
-	#region FUNCTIONS
-
-	protected override void SetupLoadTask(HEU_SessionBase session)
+	/// <summary>
+	/// Lightweight Unity geometry generator for Houdini geometry.
+	/// Given already loaded geometry buffers, creates corresponding Unity geometry.
+	/// </summary>
+	public class HEU_GeoSync : HEU_BaseSync
 	{
-	    if (_loadTask == null)
-	    {
-		_loadTask = new HEU_ThreadedTaskLoadGeo();
-	    }
+		#region FUNCTIONS
 
-	    _loadTask.SetupLoadFile(session, this, _cookNodeID, _filePath);
-	    _loadTask.Start();
+		protected override void SetupLoadTask(HEU_SessionBase session)
+		{
+			if (_loadTask == null)
+			{
+				_loadTask = new HEU_ThreadedTaskLoadGeo();
+			}
+
+			_loadTask.SetupLoadFile(session, this, _cookNodeID, _filePath);
+			_loadTask.Start();
+		}
+
+		#endregion
+
+		#region DATA
+
+		public string _filePath = "";
+
+		#endregion
 	}
-
-	#endregion
-
-	#region DATA
-
-	public string _filePath = "";
-
-	#endregion
-    }
 
 }   // HoudiniEngineUnity

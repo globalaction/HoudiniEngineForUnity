@@ -37,13 +37,13 @@ public class HEU_ScriptCallbackExample : MonoBehaviour
 
     void AssetCallbackWithMsg(string msg)
     {
-	Debug.Log("AssetCallbackWithMsg:: " + msg);
-	_msg = msg;
+        Debug.Log("AssetCallbackWithMsg:: " + msg);
+        _msg = msg;
     }
 
     void AssetCallbackNoMsg()
     {
-	Debug.Log("AssetCallbackNoMsg");
+        Debug.Log("AssetCallbackNoMsg");
     }
 
 

@@ -39,141 +39,141 @@ using System.Runtime.CompilerServices;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_NodeId = System.Int32;
-    using HAPI_AssetLibraryId = System.Int32;
-    using HAPI_StringHandle = System.Int32;
-    using HAPI_ErrorCodeBits = System.Int32;
-    using HAPI_NodeTypeBits = System.Int32;
-    using HAPI_NodeFlagsBits = System.Int32;
-    using HAPI_ParmId = System.Int32;
-    using HAPI_PartId = System.Int32;
-
-    /// <summary>
-    /// PDG asset link link state
-    /// </summary>
-    public enum HEU_LinkStateWrapper
-    {
-        INACTIVE,
-        LINKING,
-        LINKED,
-        ERROR_NOT_LINKED
-    }
-
-    /// <summary>
-    /// PDG asset link
-    /// </summary>
-    public interface IHEU_PDGAssetLink
-    {
-	bool AutoCook { get; set; }
-
-	bool UseHEngineData { get; set; }
-
-	// Filter strings
-	bool UseTOPNodeFilter { get; set; }
-	bool UseTOPOutputFilter { get; set; }
-	string TopNodeFilter { get; set; }
-	string TopOutputFilter { get; set; }
-
-	HEU_HoudiniAsset ParentAsset{ get; }
-	string AssetPath { get; }
-
-	GameObject AssetGO { get; }
-
-	string AssetName { get; }
-
-	HAPI_NodeId AssetID { get; }
-
-	List<HEU_TOPNetworkData> TopNetworks { get; }
-
-	string[] TopNetworkNames { get; }
-
-	int SelectedTOPNetwork { get; }
-
-	HEU_LinkStateWrapper PDGLinkState { get; }
-
-	// The root gameobject to place all loaded geometry under
-	GameObject LoadRootGameObject { get; }
-
-	// The root directory for generated output
-	string OutputCachePathRoot { get; }
-
-	void Setup(HEU_HoudiniAsset hdaAsset);
-	
-	/// <summary>
-	/// Reset all TOP network and node state.
-	/// Should be done after the linked HDA has rebuilt.
-	/// </summary>
-	void Reset();
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_NodeId = System.Int32;
+	using HAPI_AssetLibraryId = System.Int32;
+	using HAPI_StringHandle = System.Int32;
+	using HAPI_ErrorCodeBits = System.Int32;
+	using HAPI_NodeTypeBits = System.Int32;
+	using HAPI_NodeFlagsBits = System.Int32;
+	using HAPI_ParmId = System.Int32;
+	using HAPI_PartId = System.Int32;
 
 	/// <summary>
-	/// Refresh this object's internal state by querying and populating TOP network and nodes
-	/// from linked HDA.
+	/// PDG asset link link state
 	/// </summary>
-	void Refresh();
-
-	List<KeyValuePair<int, HEU_TOPNodeData>> GetNonHiddenTOPNodes(HEU_TOPNetworkData topNetwork);
-
+	public enum HEU_LinkStateWrapper
+	{
+		INACTIVE,
+		LINKING,
+		LINKED,
+		ERROR_NOT_LINKED
+	}
 
 	/// <summary>
-	/// Set the TOP network at the given index as currently selected TOP network
+	/// PDG asset link
 	/// </summary>
-	/// <param name="newIndex">Index of the TOP network</param>
-	void SelectTOPNetwork(int newIndex);
+	public interface IHEU_PDGAssetLink
+	{
+		bool AutoCook { get; set; }
+
+		bool UseHEngineData { get; set; }
+
+		// Filter strings
+		bool UseTOPNodeFilter { get; set; }
+		bool UseTOPOutputFilter { get; set; }
+		string TopNodeFilter { get; set; }
+		string TopOutputFilter { get; set; }
+
+		HEU_HoudiniAsset ParentAsset { get; }
+		string AssetPath { get; }
+
+		GameObject AssetGO { get; }
+
+		string AssetName { get; }
+
+		HAPI_NodeId AssetID { get; }
+
+		List<HEU_TOPNetworkData> TopNetworks { get; }
+
+		string[] TopNetworkNames { get; }
+
+		int SelectedTOPNetwork { get; }
+
+		HEU_LinkStateWrapper PDGLinkState { get; }
+
+		// The root gameobject to place all loaded geometry under
+		GameObject LoadRootGameObject { get; }
+
+		// The root directory for generated output
+		string OutputCachePathRoot { get; }
+
+		void Setup(HEU_HoudiniAsset hdaAsset);
+
+		/// <summary>
+		/// Reset all TOP network and node state.
+		/// Should be done after the linked HDA has rebuilt.
+		/// </summary>
+		void Reset();
+
+		/// <summary>
+		/// Refresh this object's internal state by querying and populating TOP network and nodes
+		/// from linked HDA.
+		/// </summary>
+		void Refresh();
+
+		List<KeyValuePair<int, HEU_TOPNodeData>> GetNonHiddenTOPNodes(HEU_TOPNetworkData topNetwork);
 
 
-	/// <summary>
-	/// Set the TOP node at the given index in the given TOP network as currently selected TOP node
-	/// </summary>
-	/// <param name="network">Container TOP network</param>
-	/// <param name="newIndex">Index of the TOP node to be selected</param>
-	void SelectTOPNode(HEU_TOPNetworkData network, int newIndex);
+		/// <summary>
+		/// Set the TOP network at the given index as currently selected TOP network
+		/// </summary>
+		/// <param name="newIndex">Index of the TOP network</param>
+		void SelectTOPNetwork(int newIndex);
 
-	HEU_TOPNetworkData GetSelectedTOPNetwork();
 
-	HEU_TOPNodeData GetSelectedTOPNode();
+		/// <summary>
+		/// Set the TOP node at the given index in the given TOP network as currently selected TOP node
+		/// </summary>
+		/// <param name="network">Container TOP network</param>
+		/// <param name="newIndex">Index of the TOP node to be selected</param>
+		void SelectTOPNode(HEU_TOPNetworkData network, int newIndex);
 
-	HEU_TOPNetworkData GetTOPNetwork(int index);
+		HEU_TOPNetworkData GetSelectedTOPNetwork();
 
-	/// <summary>
-	/// Dirty the specified TOP node and clear its work item results.
-	/// </summary>
-	/// <param name="topNode"></param>
-	void DirtyTOPNode(HEU_TOPNodeData topNode);
+		HEU_TOPNodeData GetSelectedTOPNode();
 
-	/// <summary>
-	/// Cook the specified TOP node.
-	/// </summary>
-	/// <param name="topNode"></param>
-	void CookTOPNode(HEU_TOPNodeData topNode);
+		HEU_TOPNetworkData GetTOPNetwork(int index);
 
-	/// <summary>
-	/// Dirty the currently selected TOP network and clear all work item results.
-	/// </summary>
-	void DirtyAll();
+		/// <summary>
+		/// Dirty the specified TOP node and clear its work item results.
+		/// </summary>
+		/// <param name="topNode"></param>
+		void DirtyTOPNode(HEU_TOPNodeData topNode);
 
-	/// <summary>
-	/// Cook the output TOP node of the currently selected TOP network.
-	/// </summary>
-	void CookOutput();
+		/// <summary>
+		/// Cook the specified TOP node.
+		/// </summary>
+		/// <param name="topNode"></param>
+		void CookTOPNode(HEU_TOPNodeData topNode);
 
-	/// <summary>
-	/// Pause the PDG cook of the currently selected TOP network
-	/// </summary>
-	void PauseCook();
+		/// <summary>
+		/// Dirty the currently selected TOP network and clear all work item results.
+		/// </summary>
+		void DirtyAll();
 
-	/// <summary>
-	/// Cancel the PDG cook of the currently selected TOP network
-	/// </summary>
-	void CancelCook();
+		/// <summary>
+		/// Cook the output TOP node of the currently selected TOP network.
+		/// </summary>
+		void CookOutput();
 
-	HEU_SessionBase GetHAPISession();
+		/// <summary>
+		/// Pause the PDG cook of the currently selected TOP network
+		/// </summary>
+		void PauseCook();
 
-	HEU_TOPNodeData GetTOPNode(HAPI_NodeId nodeID);
-	
-	string GetTOPNodeStatus(HEU_TOPNodeData topNode);
-    }
+		/// <summary>
+		/// Cancel the PDG cook of the currently selected TOP network
+		/// </summary>
+		void CancelCook();
+
+		HEU_SessionBase GetHAPISession();
+
+		HEU_TOPNodeData GetTOPNode(HAPI_NodeId nodeID);
+
+		string GetTOPNodeStatus(HEU_TOPNodeData topNode);
+	}
 
 
 }   // HoudiniEngineUnity

@@ -39,78 +39,78 @@ using System.Runtime.CompilerServices;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_NodeId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_NodeId = System.Int32;
 
-    /// <summary>
-    /// Represents an instanced object along with its list of instances.
-    /// </summary>
-    public class HEU_ObjectInstanceInfo : ScriptableObject, IEquivable<HEU_ObjectInstanceInfo>
-    {
-	// Instanced game objects. User can override these. Randomly assigned if more than 1.
-	public List<HEU_InstancedInput> _instancedInputs = new List<HEU_InstancedInput>();
-
-	// The part using this instanced object
-	public HEU_PartData _partTarget;
-
-	// If first element in _instancedGameObjects is a Houdini Engine object node, then this would be its node ID
-	public HAPI_NodeId _instancedObjectNodeID = HEU_Defines.HEU_INVALID_NODE_ID;
-
-	// Path in Unity to the instanced object (could be empty or null if not a Unity instanced object)
-	public string _instancedObjectPath;
-
-	// Instances using the source instanced object
-	public List<GameObject> _instances = new List<GameObject>();
-
-	public bool IsEquivalentTo(HEU_ObjectInstanceInfo other)
+	/// <summary>
+	/// Represents an instanced object along with its list of instances.
+	/// </summary>
+	public class HEU_ObjectInstanceInfo : ScriptableObject, IEquivable<HEU_ObjectInstanceInfo>
 	{
-	    bool bResult = true;
+		// Instanced game objects. User can override these. Randomly assigned if more than 1.
+		public List<HEU_InstancedInput> _instancedInputs = new List<HEU_InstancedInput>();
 
-	    string header = "HEU_ObjectInstanceInfo";
+		// The part using this instanced object
+		public HEU_PartData _partTarget;
 
-	    if (other == null)
-	    {
-		HEU_Logger.LogError(header + " Not equivalent");
-		return false;
-	    }
+		// If first element in _instancedGameObjects is a Houdini Engine object node, then this would be its node ID
+		public HAPI_NodeId _instancedObjectNodeID = HEU_Defines.HEU_INVALID_NODE_ID;
 
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._instancedInputs, other._instancedInputs, ref bResult, header, "_instancedInputs");
+		// Path in Unity to the instanced object (could be empty or null if not a Unity instanced object)
+		public string _instancedObjectPath;
 
-	    return bResult;
+		// Instances using the source instanced object
+		public List<GameObject> _instances = new List<GameObject>();
+
+		public bool IsEquivalentTo(HEU_ObjectInstanceInfo other)
+		{
+			bool bResult = true;
+
+			string header = "HEU_ObjectInstanceInfo";
+
+			if (other == null)
+			{
+				HEU_Logger.LogError(header + " Not equivalent");
+				return false;
+			}
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._instancedInputs, other._instancedInputs, ref bResult, header, "_instancedInputs");
+
+			return bResult;
+		}
+
 	}
 
-    }
-
-    /// <summary>
-    /// Container for an instanced object's input gameobject, and offsets.
-    /// </summary>
-    [System.Serializable]
-    public class HEU_InstancedInput : IEquivable<HEU_InstancedInput>
-    {
-	public GameObject _instancedGameObject;
-	public Vector3 _rotationOffset = Vector3.zero;
-	public Vector3 _scaleOffset = Vector3.one;
-
-	public bool IsEquivalentTo(HEU_InstancedInput other)
+	/// <summary>
+	/// Container for an instanced object's input gameobject, and offsets.
+	/// </summary>
+	[System.Serializable]
+	public class HEU_InstancedInput : IEquivable<HEU_InstancedInput>
 	{
-	    bool bResult = true;
+		public GameObject _instancedGameObject;
+		public Vector3 _rotationOffset = Vector3.zero;
+		public Vector3 _scaleOffset = Vector3.one;
 
-	    string header = "HEU_InstancedInput";
+		public bool IsEquivalentTo(HEU_InstancedInput other)
+		{
+			bool bResult = true;
 
-	    if (other == null)
-	    {
-		HEU_Logger.LogError(header + " Not equivalent");
-		return false;
-	    }
+			string header = "HEU_InstancedInput";
 
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._instancedGameObject, other._instancedGameObject, ref bResult, header, "_instancedGameObject");
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._rotationOffset, other._rotationOffset, ref bResult, header, "_rotationOffset");
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._scaleOffset, other._scaleOffset, ref bResult, header, "_scaleOffset");
+			if (other == null)
+			{
+				HEU_Logger.LogError(header + " Not equivalent");
+				return false;
+			}
 
-	    return bResult;
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._instancedGameObject, other._instancedGameObject, ref bResult, header, "_instancedGameObject");
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._rotationOffset, other._rotationOffset, ref bResult, header, "_rotationOffset");
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._scaleOffset, other._scaleOffset, ref bResult, header, "_scaleOffset");
+
+			return bResult;
+		}
+
 	}
-
-    }
 
 }   // HoudiniEngineUnity

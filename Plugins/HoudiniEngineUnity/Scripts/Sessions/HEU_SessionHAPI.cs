@@ -38,26 +38,26 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_UInt8 = System.Byte;
-    using HAPI_Int8 = System.SByte;
-    using HAPI_Int16 = System.Int16;
-    using HAPI_Int64 = System.Int64;
-    using HAPI_StringHandle = System.Int32;
-    using HAPI_ErrorCodeBits = System.Int32;
-    using HAPI_AssetLibraryId = System.Int32;
-    using HAPI_NodeId = System.Int32;
-    using HAPI_NodeTypeBits = System.Int32;
-    using HAPI_NodeFlagsBits = System.Int32;
-    using HAPI_ParmId = System.Int32;
-    using HAPI_PartId = System.Int32;
-    using HAPI_PDG_WorkitemId = System.Int32;
-    using HAPI_PDG_GraphContextId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_UInt8 = System.Byte;
+	using HAPI_Int8 = System.SByte;
+	using HAPI_Int16 = System.Int16;
+	using HAPI_Int64 = System.Int64;
+	using HAPI_StringHandle = System.Int32;
+	using HAPI_ErrorCodeBits = System.Int32;
+	using HAPI_AssetLibraryId = System.Int32;
+	using HAPI_NodeId = System.Int32;
+	using HAPI_NodeTypeBits = System.Int32;
+	using HAPI_NodeFlagsBits = System.Int32;
+	using HAPI_ParmId = System.Int32;
+	using HAPI_PartId = System.Int32;
+	using HAPI_PDG_WorkitemId = System.Int32;
+	using HAPI_PDG_GraphContextId = System.Int32;
 
 
-    public class HEU_SessionHAPI : HEU_SessionBase
-    {
+	public class HEU_SessionHAPI : HEU_SessionBase
+	{
 
 #if HOUDINIENGINEUNITY_ENABLED
 
@@ -2696,6 +2696,6 @@ namespace HoudiniEngineUnity
 
 #endif // HOUDINIENGINEUNITY_ENABLED
 
-    }
+	}
 
 }   // HoudiniEngineUnity

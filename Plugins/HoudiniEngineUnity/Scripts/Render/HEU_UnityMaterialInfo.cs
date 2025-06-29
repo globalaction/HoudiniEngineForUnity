@@ -26,21 +26,21 @@
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Container for Unity and Substance material data
-    /// </summary>
-    public class HEU_UnityMaterialInfo
-    {
-	public string _unityMaterialPath;
-	public string _substancePath;
-	public int _substanceIndex;
-
-	public HEU_UnityMaterialInfo(string unityMaterialPath, string substancePath, int substanceIndex)
+	/// <summary>
+	/// Container for Unity and Substance material data
+	/// </summary>
+	public class HEU_UnityMaterialInfo
 	{
-	    _unityMaterialPath = unityMaterialPath;
-	    _substancePath = substancePath;
-	    _substanceIndex = substanceIndex;
+		public string _unityMaterialPath;
+		public string _substancePath;
+		public int _substanceIndex;
+
+		public HEU_UnityMaterialInfo(string unityMaterialPath, string substancePath, int substanceIndex)
+		{
+			_unityMaterialPath = unityMaterialPath;
+			_substancePath = substancePath;
+			_substanceIndex = substanceIndex;
+		}
 	}
-    }
 
 }   // HoudiniEngineUnity

@@ -35,19 +35,19 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_StringHandle = System.Int32;
-    using HAPI_NodeId = System.Int32;
-    using HAPI_PDG_WorkItemId = System.Int32;
-    using HAPI_PDG_GraphContextId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_StringHandle = System.Int32;
+	using HAPI_NodeId = System.Int32;
+	using HAPI_PDG_WorkItemId = System.Int32;
+	using HAPI_PDG_GraphContextId = System.Int32;
 
 
-    /// <summary>
-    /// Session wrapper for HAPI PDG calls.
-    /// </summary>
-    public static class HEU_SessionPDG
-    {
+	/// <summary>
+	/// Session wrapper for HAPI PDG calls.
+	/// </summary>
+	public static class HEU_SessionPDG
+	{
 #if HOUDINIENGINEUNITY_ENABLED
 
 	// SESSION ----------------------------------------------------------------------------------------------------
@@ -201,6 +201,6 @@ namespace HoudiniEngineUnity
 	}
 
 #endif
-    }
+	}
 
 }   // HoudiniEngineUnity

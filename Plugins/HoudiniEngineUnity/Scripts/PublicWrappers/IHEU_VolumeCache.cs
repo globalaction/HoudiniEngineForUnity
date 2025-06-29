@@ -56,29 +56,29 @@ namespace HoudiniEngineUnity
     /// </summary>
     public interface IHEU_VolumeCache
     {
-	List<HEU_VolumeLayer> Layers { get; }
+        List<HEU_VolumeLayer> Layers { get; }
 
-	int TileIndex { get; }
+        int TileIndex { get; }
 
-	string ObjectName { get; }
+        string ObjectName { get; }
 
-	string GeoName { get; }
+        string GeoName { get; }
 
-	TerrainData TerrainData { get; }
+        TerrainData TerrainData { get; }
 
-	HEU_VolumeScatterTrees ScatterTrees { get; }
+        HEU_VolumeScatterTrees ScatterTrees { get; }
 
-	HEU_DetailProperties DetailProperties { get; }
+        HEU_DetailProperties DetailProperties { get; }
 
-	void ResetParameters();
+        void ResetParameters();
 
-	HEU_VolumeLayer GetLayer(string layerName);
+        HEU_VolumeLayer GetLayer(string layerName);
 
 
-	void PopulatePreset(HEU_VolumeCachePreset cachePreset);
-	
-	bool ApplyPreset(HEU_VolumeCachePreset volumeCachePreset);
-	
+        void PopulatePreset(HEU_VolumeCachePreset cachePreset);
+
+        bool ApplyPreset(HEU_VolumeCachePreset volumeCachePreset);
+
     }
 
 

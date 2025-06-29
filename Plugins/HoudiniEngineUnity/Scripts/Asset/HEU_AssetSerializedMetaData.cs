@@ -40,38 +40,38 @@ using System.Runtime.CompilerServices;
 
 namespace HoudiniEngineUnity
 {
-    // Super hacky way to force save data when access is limited such as undo deletion events
-    internal class HEU_AssetSerializedMetaData : ScriptableObject, IEquivable<HEU_AssetSerializedMetaData>
-    {
-	[SerializeField]
-	private bool _softDeleted = false;
-	public bool SoftDeleted { get { return _softDeleted; } set { _softDeleted = value; } }
-
-	// Map of (Curve name) -> List of curve node data for saving scale/rotation values between rebuilds.
-	[SerializeField]
-	private Dictionary<string, List<CurveNodeData>> _savedCurveNodeData = new Dictionary<string, List<CurveNodeData>>();
-	public Dictionary<string, List<CurveNodeData>> SavedCurveNodeData { get { return _savedCurveNodeData; } }
-
-	[SerializeField]
-	private Dictionary<string, HEU_InputCurveInfo> _savedInputCurveInfo = new Dictionary<string, HEU_InputCurveInfo>();
-	public Dictionary<string, HEU_InputCurveInfo> SavedInputCurveInfo { get { return _savedInputCurveInfo; } }
-
-	public bool IsEquivalentTo(HEU_AssetSerializedMetaData other)
+	// Super hacky way to force save data when access is limited such as undo deletion events
+	internal class HEU_AssetSerializedMetaData : ScriptableObject, IEquivable<HEU_AssetSerializedMetaData>
 	{
-	    bool bResult = true;
+		[SerializeField]
+		private bool _softDeleted = false;
+		public bool SoftDeleted { get { return _softDeleted; } set { _softDeleted = value; } }
 
-	    string header = "HEU_AssetSerializedMetaData";
+		// Map of (Curve name) -> List of curve node data for saving scale/rotation values between rebuilds.
+		[SerializeField]
+		private Dictionary<string, List<CurveNodeData>> _savedCurveNodeData = new Dictionary<string, List<CurveNodeData>>();
+		public Dictionary<string, List<CurveNodeData>> SavedCurveNodeData { get { return _savedCurveNodeData; } }
 
-	    if (other == null)
-	    {
-		HEU_Logger.LogError(header + " Not equivalent");
-		return false;
-	    }
+		[SerializeField]
+		private Dictionary<string, HEU_InputCurveInfo> _savedInputCurveInfo = new Dictionary<string, HEU_InputCurveInfo>();
+		public Dictionary<string, HEU_InputCurveInfo> SavedInputCurveInfo { get { return _savedInputCurveInfo; } }
 
-	    // These things shouldn't be tested because they're specifically "hacky"
+		public bool IsEquivalentTo(HEU_AssetSerializedMetaData other)
+		{
+			bool bResult = true;
 
-	    return bResult;
+			string header = "HEU_AssetSerializedMetaData";
+
+			if (other == null)
+			{
+				HEU_Logger.LogError(header + " Not equivalent");
+				return false;
+			}
+
+			// These things shouldn't be tested because they're specifically "hacky"
+
+			return bResult;
+		}
+
 	}
-
-    }
 }

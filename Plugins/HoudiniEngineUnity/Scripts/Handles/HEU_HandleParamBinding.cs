@@ -30,57 +30,57 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_NodeId = System.Int32;
-    using HAPI_ParmId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_NodeId = System.Int32;
+	using HAPI_ParmId = System.Int32;
 
-    /// <summary>
-    /// Represents a Handle binding to a parameter.
-    /// </summary>
-    [System.Serializable]
-    internal class HEU_HandleParamBinding : IEquivable<HEU_HandleParamBinding>
-    {
-	public enum HEU_HandleParamType
+	/// <summary>
+	/// Represents a Handle binding to a parameter.
+	/// </summary>
+	[System.Serializable]
+	internal class HEU_HandleParamBinding : IEquivable<HEU_HandleParamBinding>
 	{
-	    TRANSLATE,
-	    ROTATE,
-	    SCALE
+		public enum HEU_HandleParamType
+		{
+			TRANSLATE,
+			ROTATE,
+			SCALE
+		}
+
+		public HEU_HandleParamType _paramType;
+
+		public HAPI_ParmId _parmID;
+
+		public string _paramName;
+
+		public bool _bDisabled;
+
+		public bool[] _boundChannels = new bool[3];
+
+		public bool IsEquivalentTo(HEU_HandleParamBinding other)
+		{
+
+			bool bResult = true;
+
+			string header = "HEU_HandleParamBinding";
+
+			if (other == null)
+			{
+				HEU_Logger.LogError(header + " Not equivalent");
+				return false;
+			}
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._paramType, other._paramType, ref bResult, header, "_paramType");
+
+			// SKip parmID
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._paramName, other._paramName, ref bResult, header, "_paramName");
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._bDisabled, other._bDisabled, ref bResult, header, "_bDisabled");
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._boundChannels, other._boundChannels, ref bResult, header, "_boundChannels");
+
+			return bResult;
+		}
 	}
-
-	public HEU_HandleParamType _paramType;
-
-	public HAPI_ParmId _parmID;
-
-	public string _paramName;
-
-	public bool _bDisabled;
-
-	public bool[] _boundChannels = new bool[3];
-
-	public bool IsEquivalentTo(HEU_HandleParamBinding other)
-	{
-
-	    bool bResult = true;
-
-	    string header = "HEU_HandleParamBinding";
-
-	    if (other == null)
-	    {
-		HEU_Logger.LogError(header + " Not equivalent");
-		return false;
-	    }
-
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._paramType, other._paramType, ref bResult, header, "_paramType");
-
-	    // SKip parmID
-
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._paramName, other._paramName, ref bResult, header, "_paramName");
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._bDisabled, other._bDisabled, ref bResult, header, "_bDisabled");
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._boundChannels, other._boundChannels, ref bResult, header, "_boundChannels");
-
-	    return bResult;
-	}
-    }
 
 }   // HoudiniEngineUnity

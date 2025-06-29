@@ -38,69 +38,69 @@ using UnityEditor;
 
 namespace HoudiniEngineUnity
 {
-// Helper written by: https://gist.github.com/cjaube/944b0d5221808c2a761d616f29deaf49
+    // Helper written by: https://gist.github.com/cjaube/944b0d5221808c2a761d616f29deaf49
 
-// To use:
-//    #if UNITY_PIPELINE_URP
-//    // code for URP
-//    #elif UNITY_PIPELINE_HDRP
-//    // code for HDRP
-//    #else
-//    // code for Stardard Pipeline
-//    #endif
+    // To use:
+    //    #if UNITY_PIPELINE_URP
+    //    // code for URP
+    //    #elif UNITY_PIPELINE_HDRP
+    //    // code for HDRP
+    //    #else
+    //    // code for Stardard Pipeline
+    //    #endif
 
-public enum HEU_PipelineType
-{
-    Unsupported,
-    BiRP,
-    URP,
-    HDRP
-}
+    public enum HEU_PipelineType
+    {
+        Unsupported,
+        BiRP,
+        URP,
+        HDRP
+    }
 
 #if UNITY_EDITOR && HOUDINIENGINEUNITY_ENABLED
     [InitializeOnLoad]
 #endif
-public class HEU_RenderingPipelineDefines
-{
+    public class HEU_RenderingPipelineDefines
+    {
 
- 
-    static HEU_RenderingPipelineDefines()
-    {
-        UpdateDefines();
-    }
- 
-    /// <summary>
-    /// Update the unity pipeline defines for URP
-    /// </summary>
-    static void UpdateDefines()
-    {
-        var pipeline = GetPipeline();
- 
-        if (pipeline == HEU_PipelineType.URP)
+
+        static HEU_RenderingPipelineDefines()
         {
-            AddDefine("UNITY_PIPELINE_URP");
+            UpdateDefines();
         }
-        else
+
+        /// <summary>
+        /// Update the unity pipeline defines for URP
+        /// </summary>
+        static void UpdateDefines()
         {
-            RemoveDefine("UNITY_PIPELINE_URP");
+            var pipeline = GetPipeline();
+
+            if (pipeline == HEU_PipelineType.URP)
+            {
+                AddDefine("UNITY_PIPELINE_URP");
+            }
+            else
+            {
+                RemoveDefine("UNITY_PIPELINE_URP");
+            }
+            if (pipeline == HEU_PipelineType.HDRP)
+            {
+                AddDefine("UNITY_PIPELINE_HDRP");
+            }
+            else
+            {
+                RemoveDefine("UNITY_PIPELINE_HDRP");
+            }
         }
-        if (pipeline == HEU_PipelineType.HDRP)
+
+
+        /// <summary>
+        /// Returns the type of renderpipeline that is currently running
+        /// </summary>
+        /// <returns></returns>
+        public static HEU_PipelineType GetPipeline()
         {
-            AddDefine("UNITY_PIPELINE_HDRP");
-        }
-        else
-        {
-            RemoveDefine("UNITY_PIPELINE_HDRP");
-        }
-    }
- 
- 
-    /// <summary>
-    /// Returns the type of renderpipeline that is currently running
-    /// </summary>
-    /// <returns></returns>
-    public static HEU_PipelineType GetPipeline()
-    {
 #if UNITY_2019_1_OR_NEWER
         if (GraphicsSettings.renderPipelineAsset != null)
         {
@@ -122,42 +122,42 @@ public class HEU_RenderingPipelineDefines
             return HEU_PipelineType.Unsupported;
         }
 #endif
-        // no SRP
-        return HEU_PipelineType.BiRP;
-    }
- 
-    /// <summary>
-    /// Add a custom define
-    /// </summary>
-    /// <param name="define"></param>
-    /// <param name="buildTargetGroup"></param>
-    static void AddDefine(string define)
-    {
-        var definesList = GetDefines();
-        if (!definesList.Contains(define))
-        {
-            definesList.Add(define);
-            SetDefines(definesList);
+            // no SRP
+            return HEU_PipelineType.BiRP;
         }
-    }
- 
-    /// <summary>
-    /// Remove a custom define
-    /// </summary>
-    /// <param name="_define"></param>
-    /// <param name="_buildTargetGroup"></param>
-    public static void RemoveDefine(string define)
-    {
-        var definesList = GetDefines();
-        if (definesList.Contains(define))
+
+        /// <summary>
+        /// Add a custom define
+        /// </summary>
+        /// <param name="define"></param>
+        /// <param name="buildTargetGroup"></param>
+        static void AddDefine(string define)
         {
-            definesList.Remove(define);
-            SetDefines(definesList);
+            var definesList = GetDefines();
+            if (!definesList.Contains(define))
+            {
+                definesList.Add(define);
+                SetDefines(definesList);
+            }
         }
-    }
- 
-    public static List<string> GetDefines()
-    {
+
+        /// <summary>
+        /// Remove a custom define
+        /// </summary>
+        /// <param name="_define"></param>
+        /// <param name="_buildTargetGroup"></param>
+        public static void RemoveDefine(string define)
+        {
+            var definesList = GetDefines();
+            if (definesList.Contains(define))
+            {
+                definesList.Remove(define);
+                SetDefines(definesList);
+            }
+        }
+
+        public static List<string> GetDefines()
+        {
 
 #if UNITY_EDITOR
         var target = EditorUserBuildSettings.activeBuildTarget;
@@ -165,18 +165,18 @@ public class HEU_RenderingPipelineDefines
         var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
         return defines.Split(';').ToList();
 #else
-        return new List<string>();
+            return new List<string>();
 #endif
-    }
- 
-    public static void SetDefines(List<string> definesList)
-    {
+        }
+
+        public static void SetDefines(List<string> definesList)
+        {
 #if UNITY_EDITOR
         var target = EditorUserBuildSettings.activeBuildTarget;
         var buildTargetGroup = BuildPipeline.GetBuildTargetGroup(target);
         var defines = string.Join(";", definesList.ToArray());
         PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, defines);
 #endif
+        }
     }
-}
 }

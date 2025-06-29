@@ -48,22 +48,22 @@ namespace HoudiniEngineUnity
     using HAPI_NodeFlagsBits = System.Int32;
     using HAPI_ParmId = System.Int32;
     using HAPI_PartId = System.Int32;
-    
-   
+
+
     /// <summary>
     /// A subcomponent of an HDA (HEU_HoudiniAsset)
     /// Used primarily as a helper interface
     /// </summary>
     public interface IHEU_HoudiniAssetSubcomponent
     {
-	/// <summary>The parent HDA of this subcomponent</summary>
-	HEU_HoudiniAsset ParentAsset { get; }
+        /// <summary>The parent HDA of this subcomponent</summary>
+        HEU_HoudiniAsset ParentAsset { get; }
 
-	/// <summary>A helper to get the session</summary>
-	HEU_SessionBase GetSession();
+        /// <summary>A helper to get the session</summary>
+        HEU_SessionBase GetSession();
 
-	/// <summary>A helper to recook the asset with default parameters</summary>
-	void Recook();
+        /// <summary>A helper to recook the asset with default parameters</summary>
+        void Recook();
     }
 
 

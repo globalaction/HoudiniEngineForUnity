@@ -39,49 +39,49 @@ using System.Runtime.CompilerServices;
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Object to store instance input UI state so that we can check if UI changed
-    /// and apply modifications for just this object instead of for the entire asset.
-    /// Used by HEU_InstanceInputUI.
-    /// </summary>
-    [System.Serializable]
-    internal class HEU_InstanceInputUIState : ScriptableObject, IEquivable<HEU_InstanceInputUIState>
-    {
-	// Whether to show all instance inputs to expanded form
-	public bool _showInstanceInputs = true;
-
-	// For pagination, the number of inputs to show per page
-	public int _numInputsToShowUI = 5;
-
-	// The current page to show
-	public int _inputsPageIndexUI = 0;
-
-	internal void CopyTo(HEU_InstanceInputUIState dest)
+	/// <summary>
+	/// Object to store instance input UI state so that we can check if UI changed
+	/// and apply modifications for just this object instead of for the entire asset.
+	/// Used by HEU_InstanceInputUI.
+	/// </summary>
+	[System.Serializable]
+	internal class HEU_InstanceInputUIState : ScriptableObject, IEquivable<HEU_InstanceInputUIState>
 	{
-	    dest._showInstanceInputs = _showInstanceInputs;
-	    dest._numInputsToShowUI = _numInputsToShowUI;
-	    dest._inputsPageIndexUI = _inputsPageIndexUI;
+		// Whether to show all instance inputs to expanded form
+		public bool _showInstanceInputs = true;
+
+		// For pagination, the number of inputs to show per page
+		public int _numInputsToShowUI = 5;
+
+		// The current page to show
+		public int _inputsPageIndexUI = 0;
+
+		internal void CopyTo(HEU_InstanceInputUIState dest)
+		{
+			dest._showInstanceInputs = _showInstanceInputs;
+			dest._numInputsToShowUI = _numInputsToShowUI;
+			dest._inputsPageIndexUI = _inputsPageIndexUI;
+		}
+
+		public bool IsEquivalentTo(HEU_InstanceInputUIState other)
+		{
+			bool bResult = true;
+
+			string header = "HEU_InstanceInputUIState";
+
+			if (other == null)
+			{
+				HEU_Logger.LogError(header + " Not equivalent");
+				return false;
+			}
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._showInstanceInputs, other._showInstanceInputs, ref bResult, header, "_showInstanceInputs");
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._numInputsToShowUI, other._numInputsToShowUI, ref bResult, header, "_numInputsToShowUI");
+
+			HEU_TestHelpers.AssertTrueLogEquivalent(this._inputsPageIndexUI, other._inputsPageIndexUI, ref bResult, header, "_inputPageIndexUI");
+			return bResult;
+		}
 	}
-
-	public bool IsEquivalentTo(HEU_InstanceInputUIState other)
-	{
-	    bool bResult = true;
-
-	    string header = "HEU_InstanceInputUIState";
-
-	    if (other == null)
-	    {
-		HEU_Logger.LogError(header + " Not equivalent");
-		return false;
-	    }
-
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._showInstanceInputs, other._showInstanceInputs, ref bResult, header, "_showInstanceInputs");
-
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._numInputsToShowUI, other._numInputsToShowUI, ref bResult, header, "_numInputsToShowUI");
-
-	    HEU_TestHelpers.AssertTrueLogEquivalent(this._inputsPageIndexUI , other._inputsPageIndexUI, ref bResult, header, "_inputPageIndexUI");
-	    return bResult;
-	}
-    }
 
 }   // HoudiniEngineUnity

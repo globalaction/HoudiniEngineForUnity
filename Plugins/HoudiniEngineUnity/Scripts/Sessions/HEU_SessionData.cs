@@ -33,240 +33,240 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    [Serializable]
-    public enum SessionConnectionState
-    {
-	NOT_CONNECTED,
-	CONNECTED,
-	FAILED_TO_CONNECT
-    }
+	[Serializable]
+	public enum SessionConnectionState
+	{
+		NOT_CONNECTED,
+		CONNECTED,
+		FAILED_TO_CONNECT
+	}
 
-    [Serializable]
-    public enum SessionMode
-    {
-	Socket,
-	Pipe
-    }
+	[Serializable]
+	public enum SessionMode
+	{
+		Socket,
+		Pipe
+	}
 
-    /// <summary>
-    /// Container for session-specific data.
-    /// Note that this is sealed for serialization purposes.
-    /// </summary>
-    [Serializable]
-    public sealed class HEU_SessionData
-    {
-	public static long INVALID_SESSION_ID = -1;
+	/// <summary>
+	/// Container for session-specific data.
+	/// Note that this is sealed for serialization purposes.
+	/// </summary>
+	[Serializable]
+	public sealed class HEU_SessionData
+	{
+		public static long INVALID_SESSION_ID = -1;
 
-	// Actual HAPI session data
-	public HAPI_Session _HAPISession = new HAPI_Session();
+		// Actual HAPI session data
+		public HAPI_Session _HAPISession = new HAPI_Session();
 
 #pragma warning disable 0414
-	// Process ID for Thrift pipe session
-	[SerializeField]
-	private int _serverProcessID = -1;
+		// Process ID for Thrift pipe session
+		[SerializeField]
+		private int _serverProcessID = -1;
 
-	// Whether the session has been initialized
-	[SerializeField]
-	private bool _initialized;
+		// Whether the session has been initialized
+		[SerializeField]
+		private bool _initialized;
 
-	// Name of pipe (for pipe session)
-	[SerializeField]
-	private string _pipeName;
+		// Name of pipe (for pipe session)
+		[SerializeField]
+		private string _pipeName;
 
-	[SerializeField]
-	private int _port;
+		[SerializeField]
+		private int _port;
 #pragma warning restore 0414
 
-	// ID for the HEU_SessionBase class type
-	[SerializeField]
-	private string _sessionClassType;
+		// ID for the HEU_SessionBase class type
+		[SerializeField]
+		private string _sessionClassType;
 
-	// Whether this is the default session
-	[SerializeField]
-	private bool _isDefaultSession;
+		// Whether this is the default session
+		[SerializeField]
+		private bool _isDefaultSession;
 
-	[SerializeField]
-	private HEU_SessionSyncData _sessionSync = null;
+		[SerializeField]
+		private HEU_SessionSyncData _sessionSync = null;
 
-	public HEU_SessionSyncData GetOrCreateSessionSync()
-	{
-	    if (_sessionSync == null)
-	    {
-		_sessionSync = new HEU_SessionSyncData();
-	    }
-	    return _sessionSync;
-	}
+		public HEU_SessionSyncData GetOrCreateSessionSync()
+		{
+			if (_sessionSync == null)
+			{
+				_sessionSync = new HEU_SessionSyncData();
+			}
+			return _sessionSync;
+		}
 
-	public HEU_SessionSyncData GetSessionSync()
-	{
-	    return _sessionSync;
-	}
+		public HEU_SessionSyncData GetSessionSync()
+		{
+			return _sessionSync;
+		}
 
-	public void SetSessionSync(HEU_SessionSyncData syncData)
-	{
-	    _sessionSync = syncData;
-	}
+		public void SetSessionSync(HEU_SessionSyncData syncData)
+		{
+			_sessionSync = syncData;
+		}
 
-	public long SessionID
-	{
-	    get
-	    {
+		public long SessionID
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return _HAPISession.id;
 #else
-		return INVALID_SESSION_ID;
+				return INVALID_SESSION_ID;
 #endif
-	    }
+			}
 
-	    set
-	    {
-		_HAPISession.id = value;
-	    }
-	}
+			set
+			{
+				_HAPISession.id = value;
+			}
+		}
 
-	public int ProcessID
-	{
-	    get
-	    {
+		public int ProcessID
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return _serverProcessID;
 #else
-		return -1;
+				return -1;
 #endif
-	    }
+			}
 
-	    set
-	    {
-		_serverProcessID = value;
-	    }
-	}
+			set
+			{
+				_serverProcessID = value;
+			}
+		}
 
-	public HAPI_SessionType SessionType
-	{
-	    get
-	    {
+		public HAPI_SessionType SessionType
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return _HAPISession.type;
 #else
-		return 0;
+				return 0;
 #endif
-	    }
+			}
 
-	    set
-	    {
-		_HAPISession.type = value;
-	    }
-	}
+			set
+			{
+				_HAPISession.type = value;
+			}
+		}
 
-	public bool IsInitialized
-	{
-	    get
-	    {
+		public bool IsInitialized
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return _initialized;
 #else
-		return false;
+				return false;
 #endif
-	    }
+			}
 
-	    set
-	    {
-		_initialized = value;
-	    }
-	}
+			set
+			{
+				_initialized = value;
+			}
+		}
 
-	public bool IsValidSessionID
-	{
-	    get
-	    {
+		public bool IsValidSessionID
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return SessionID > 0;
 #else
-		return false;
+				return false;
 #endif
-	    }
-	}
+			}
+		}
 
-	public string PipeName
-	{
-	    get
-	    {
+		public string PipeName
+		{
+			get
+			{
 #if HOUDINIENGINEUNITY_ENABLED
 		return _pipeName;
 #else
-		return "";
+				return "";
 #endif
-	    }
+			}
 
-	    set
-	    {
-		_pipeName = value;
-	    }
-	}
-
-	public int Port
-	{
-	    get
-	    {
-		return _port;
-	    }
-
-	    set
-	    {
-		_port = value;
-	    }
-	}
-
-	public System.Type SessionClassType
-	{
-	    get
-	    {
-		if (string.IsNullOrEmpty(_sessionClassType))
-		{
-		    return null;
+			set
+			{
+				_pipeName = value;
+			}
 		}
-		else
+
+		public int Port
 		{
-		    return System.Type.GetType(_sessionClassType);
+			get
+			{
+				return _port;
+			}
+
+			set
+			{
+				_port = value;
+			}
 		}
-	    }
 
-	    set
-	    {
-		_sessionClassType = value.ToString();
-	    }
+		public System.Type SessionClassType
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(_sessionClassType))
+				{
+					return null;
+				}
+				else
+				{
+					return System.Type.GetType(_sessionClassType);
+				}
+			}
+
+			set
+			{
+				_sessionClassType = value.ToString();
+			}
+		}
+
+		public bool IsDefaultSession
+		{
+			get
+			{
+				return _isDefaultSession;
+			}
+
+			set
+			{
+				_isDefaultSession = value;
+			}
+		}
+
+		public bool IsSessionSync
+		{
+			get
+			{
+				return _sessionSync != null;
+			}
+		}
+
+		[SerializeField]
+		private SessionConnectionState _connectionState;
+
+		public SessionConnectionState ThisConnectionMode { get { return _connectionState; } set { _connectionState = value; } }
+
+		[SerializeField]
+		private SessionMode _sessionMode;
+
+		public SessionMode ThisSessionMode { get { return _sessionMode; } set { _sessionMode = value; } }
 	}
-
-	public bool IsDefaultSession
-	{
-	    get
-	    {
-		return _isDefaultSession;
-	    }
-
-	    set
-	    {
-		_isDefaultSession = value;
-	    }
-	}
-
-	public bool IsSessionSync
-	{
-	    get
-	    {
-		return _sessionSync != null;
-	    }
-	}
-
-	[SerializeField]
-	private SessionConnectionState _connectionState;
-
-	public SessionConnectionState ThisConnectionMode { get { return _connectionState; } set { _connectionState = value; } }
-
-	[SerializeField]
-	private SessionMode _sessionMode;
-
-	public SessionMode ThisSessionMode { get { return _sessionMode; } set { _sessionMode = value; } }
-    }
 
 }   // HoudiniEngineUnity

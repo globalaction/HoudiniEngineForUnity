@@ -39,45 +39,45 @@ using UnityEditor.Experimental.SceneManagement;
 
 namespace HoudiniEngineUnity
 {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Typedefs (copy these from HEU_Common.cs)
-    using HAPI_NodeId = System.Int32;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Typedefs (copy these from HEU_Common.cs)
+	using HAPI_NodeId = System.Int32;
 
-    /// <summary>
-    /// Wrapper around Unity Editor functions.
-    /// </summary>
-    public static class HEU_EditorUtility
-    {
 	/// <summary>
-	/// Helper to mark current scene dirty so that Unity's save system will save out any procedural changes.
+	/// Wrapper around Unity Editor functions.
 	/// </summary>
-	public static void MarkSceneDirty()
+	public static class HEU_EditorUtility
 	{
+		/// <summary>
+		/// Helper to mark current scene dirty so that Unity's save system will save out any procedural changes.
+		/// </summary>
+		public static void MarkSceneDirty()
+		{
 #if UNITY_EDITOR
 	    if (Application.isEditor && !Application.isPlaying)
 	    {
 		UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
 	    }
 #endif
-	}
+		}
 
-	public static void SelectObject(GameObject gameObject)
-	{
+		public static void SelectObject(GameObject gameObject)
+		{
 #if UNITY_EDITOR
 	    Selection.objects = new GameObject[] { gameObject };
 #endif
-	}
+		}
 
-	public static void SelectObjects(GameObject[] gameObjects)
-	{
+		public static void SelectObjects(GameObject[] gameObjects)
+		{
 #if UNITY_EDITOR
 	    Selection.objects = gameObjects;
 #endif
-	}
+		}
 
-	public static Vector3 GetSelectedObjectsMeanPosition()
-	{
-	    Vector3 meanPosition = Vector3.zero;
+		public static Vector3 GetSelectedObjectsMeanPosition()
+		{
+			Vector3 meanPosition = Vector3.zero;
 #if UNITY_EDITOR
 
 	    Transform[] selectedTransforms = Selection.GetTransforms(SelectionMode.Unfiltered);
@@ -94,12 +94,12 @@ namespace HoudiniEngineUnity
 		meanPosition /= (float)numTransforms;
 	    }
 #endif
-	    return meanPosition;
-	}
+			return meanPosition;
+		}
 
-	public static Matrix4x4 GetSelectedObjectsMeanTransform()
-	{
-	    Matrix4x4 meanTransformMatrix = Matrix4x4.identity;
+		public static Matrix4x4 GetSelectedObjectsMeanTransform()
+		{
+			Matrix4x4 meanTransformMatrix = Matrix4x4.identity;
 #if UNITY_EDITOR
 
 	    Transform[] selectedTransforms = Selection.GetTransforms(SelectionMode.Unfiltered);
@@ -118,11 +118,11 @@ namespace HoudiniEngineUnity
 		HEU_HAPIUtility.SetMatrixPosition(ref meanTransformMatrix, ref position);
 	    }
 #endif
-	    return meanTransformMatrix;
-	}
+			return meanTransformMatrix;
+		}
 
-	public static GameObject SaveAsPrefabAsset(string path, GameObject go)
-	{
+		public static GameObject SaveAsPrefabAsset(string path, GameObject go)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    return PrefabUtility.SaveAsPrefabAsset(go, path);
@@ -133,40 +133,40 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	public static bool PrefabIsAddedComponentOverride(Component comp)
-	{
+		public static bool PrefabIsAddedComponentOverride(Component comp)
+		{
 #if UNITY_EDITOR && UNITY_2018_3_OR_NEWER
 	    return UnityEditor.PrefabUtility.IsAddedComponentOverride(comp);
 #else
 			return false;
 #endif
-	}
+		}
 
-	public static bool IsEditorPlaying()
-	{
+		public static bool IsEditorPlaying()
+		{
 #if UNITY_EDITOR
 	    return EditorApplication.isPlaying;
 #else
 			return false;
 #endif
-	}
+		}
 
-	public enum HEU_ReplacePrefabOptions
-	{
-	    // Replaces prefabs by matching pre-existing connections to the prefab.
-	    Default = 0,
+		public enum HEU_ReplacePrefabOptions
+		{
+			// Replaces prefabs by matching pre-existing connections to the prefab.
+			Default = 0,
 
-	    // Connects the passed objects to the prefab after uploading the prefab.
-	    ConnectToPrefab = 1,
+			// Connects the passed objects to the prefab after uploading the prefab.
+			ConnectToPrefab = 1,
 
-	    // Replaces the prefab using name based lookup in the transform hierarchy.
-	    ReplaceNameBased = 2
-	}
+			// Replaces the prefab using name based lookup in the transform hierarchy.
+			ReplaceNameBased = 2
+		}
 
-	public static GameObject ReplacePrefab(GameObject go, Object targetPrefab, HEU_ReplacePrefabOptions heuOptions)
-	{
+		public static GameObject ReplacePrefab(GameObject go, Object targetPrefab, HEU_ReplacePrefabOptions heuOptions)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -199,15 +199,15 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns true if given GameObject is an instance of a prefab.
-	/// </summary>
-	/// <param name="go">GameObject to check</param>
-	/// <returns>True if given GameObject is an instance of a prefab</returns>
-	public static bool IsPrefabInstance(GameObject go)
-	{
+		/// <summary>
+		/// Returns true if given GameObject is an instance of a prefab.
+		/// </summary>
+		/// <param name="go">GameObject to check</param>
+		/// <returns>True if given GameObject is an instance of a prefab</returns>
+		public static bool IsPrefabInstance(GameObject go)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    return PrefabUtility.IsPartOfPrefabInstance(go);
@@ -221,15 +221,15 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return false;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns true if given GameObject is a prefab asset (and not an instance of a prefab).
-	/// </summary>
-	/// <param name="go">GameObject to check</param>
-	/// <returns>True if given GameObject is a prefab asset</returns>
-	public static bool IsPrefabAsset(GameObject go)
-	{
+		/// <summary>
+		/// Returns true if given GameObject is a prefab asset (and not an instance of a prefab).
+		/// </summary>
+		/// <param name="go">GameObject to check</param>
+		/// <returns>True if given GameObject is a prefab asset</returns>
+		public static bool IsPrefabAsset(GameObject go)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    return PrefabUtility.IsPartOfPrefabAsset(go);
@@ -242,15 +242,15 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return false;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns true if the given object is being edited in prefab mode.
-	/// </summary>
-	/// <param name="obj">Object to check</param>
-	/// <returns>True if object is in prefab mode</returns>
-	public static bool IsEditingInPrefabMode(GameObject obj)
-	{
+		/// <summary>
+		/// Returns true if the given object is being edited in prefab mode.
+		/// </summary>
+		/// <param name="obj">Object to check</param>
+		/// <returns>True if object is in prefab mode</returns>
+		public static bool IsEditingInPrefabMode(GameObject obj)
+		{
 #if UNITY_EDITOR
 	    if (EditorUtility.IsPersistent(obj))
 	    {
@@ -272,16 +272,16 @@ namespace HoudiniEngineUnity
 #endif
 	    }
 #endif
-	    return false;
-	}
+			return false;
+		}
 
-	/// <summary>
-	/// Returns true if given GameObject is a disconnected instance of a prefab.
-	/// </summary>
-	/// <param name="go">GameObject to check</param>
-	/// <returns>True if given GameObject is a disconnected instance of a prefab</returns>
-	public static bool IsDisconnectedPrefabInstance(GameObject go)
-	{
+		/// <summary>
+		/// Returns true if given GameObject is a disconnected instance of a prefab.
+		/// </summary>
+		/// <param name="go">GameObject to check</param>
+		/// <returns>True if given GameObject is a disconnected instance of a prefab</returns>
+		public static bool IsDisconnectedPrefabInstance(GameObject go)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    return PrefabUtility.IsDisconnectedFromPrefabAsset(go);
@@ -294,10 +294,10 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return false;
 #endif
-	}
+		}
 
-	public static Object GetPrefabAsset(GameObject go)
-	{
+		public static Object GetPrefabAsset(GameObject go)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_2_OR_NEWER
 	    return PrefabUtility.GetCorrespondingObjectFromSource(go);
@@ -308,15 +308,15 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns the prefab asset path of the given object.
-	/// </summary>
-	/// <param name="obj">Object to get the path for</param>
-	/// <returns>Relative asset path of given object</returns>
-	public static string GetPrefabAssetPath(Object obj)
-	{
+		/// <summary>
+		/// Returns the prefab asset path of the given object.
+		/// </summary>
+		/// <param name="obj">Object to get the path for</param>
+		/// <returns>Relative asset path of given object</returns>
+		public static string GetPrefabAssetPath(Object obj)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    return PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(obj);
@@ -327,15 +327,15 @@ namespace HoudiniEngineUnity
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Disconnect the given prefab instance (unpack) so its no
-	/// longer a prefab instance.
-	/// </summary>
-	/// <param name="instance">The instance to disconnect</param>
-	public static void DisconnectPrefabInstance(GameObject instance)
-	{
+		/// <summary>
+		/// Disconnect the given prefab instance (unpack) so its no
+		/// longer a prefab instance.
+		/// </summary>
+		/// <param name="instance">The instance to disconnect</param>
+		public static void DisconnectPrefabInstance(GameObject instance)
+		{
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
 	    PrefabUtility.UnpackPrefabInstance(instance,
@@ -346,21 +346,21 @@ namespace HoudiniEngineUnity
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 #endif
-	}
+		}
 
-	public static Object InstantiatePrefab(GameObject prefabOriginal)
-	{
+		public static Object InstantiatePrefab(GameObject prefabOriginal)
+		{
 #if UNITY_EDITOR
 	    return PrefabUtility.InstantiatePrefab(prefabOriginal);
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	public static GameObject InstantiateGameObject(GameObject sourceGameObject, Transform parentTransform, bool instantiateInWorldSpace, bool bRegisterUndo)
-	{
-	    GameObject newGO = null;
+		public static GameObject InstantiateGameObject(GameObject sourceGameObject, Transform parentTransform, bool instantiateInWorldSpace, bool bRegisterUndo)
+		{
+			GameObject newGO = null;
 #if UNITY_5_4_OR_NEWER
 	    newGO = GameObject.Instantiate(sourceGameObject, parentTransform, instantiateInWorldSpace);
 #else
@@ -374,11 +374,11 @@ namespace HoudiniEngineUnity
 		Undo.RegisterCreatedObjectUndo(newGO, "Instantiated " + newGO.name);
 	    }
 #endif
-	    return newGO;
-	}
+			return newGO;
+		}
 
-	public static Component AddComponent<T>(GameObject target, bool bRegisterUndo)
-	{
+		public static Component AddComponent<T>(GameObject target, bool bRegisterUndo)
+		{
 #if UNITY_EDITOR
 	    if (bRegisterUndo)
 	    {
@@ -386,158 +386,158 @@ namespace HoudiniEngineUnity
 	    }
 	    else
 #endif
-	    {
-		return target.AddComponent(typeof(T));
-	    }
-	}
+			{
+				return target.AddComponent(typeof(T));
+			}
+		}
 
-	public static void UndoRecordObject(Object objectToUndo, string name)
-	{
+		public static void UndoRecordObject(Object objectToUndo, string name)
+		{
 #if UNITY_EDITOR
 	    Undo.RecordObject(objectToUndo, name);
 #endif
-	}
+		}
 
-	public static void UndoCollapseCurrentGroup()
-	{
+		public static void UndoCollapseCurrentGroup()
+		{
 #if UNITY_EDITOR
 	    Undo.CollapseUndoOperations(Undo.GetCurrentGroup());
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Calculates and returns a list of all assets that obj depends on.
-	/// </summary>
-	/// <param name="obj"></param>
-	/// <returns></returns>
-	public static Object[] CollectDependencies(Object obj)
-	{
+		/// <summary>
+		/// Calculates and returns a list of all assets that obj depends on.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static Object[] CollectDependencies(Object obj)
+		{
 #if UNITY_EDITOR
 	    return EditorUtility.CollectDependencies(new Object[] { obj });
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns true if obj is stored on disk
-	/// </summary>
-	/// <param name="obj"></param>
-	/// <returns></returns>
-	public static bool IsPersistant(UnityEngine.Object obj)
-	{
+		/// <summary>
+		/// Returns true if obj is stored on disk
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		public static bool IsPersistant(UnityEngine.Object obj)
+		{
 #if UNITY_EDITOR
 	    return EditorUtility.IsPersistent(obj);
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return false;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns unique name based on siblings. If given name is already found
-	/// adds integer to end and increments until found unique.
-	/// </summary>
-	/// <param name="parentTransform">Target parent for a new GameObject. Null means root level</param>
-	/// <param name="name">Requested name for a new GameObject</param>
-	/// <returns>Unique name for sibling gameobject</returns>
-	public static string GetUniqueNameForSibling(Transform parentTransform, string name)
-	{
+		/// <summary>
+		/// Returns unique name based on siblings. If given name is already found
+		/// adds integer to end and increments until found unique.
+		/// </summary>
+		/// <param name="parentTransform">Target parent for a new GameObject. Null means root level</param>
+		/// <param name="name">Requested name for a new GameObject</param>
+		/// <returns>Unique name for sibling gameobject</returns>
+		public static string GetUniqueNameForSibling(Transform parentTransform, string name)
+		{
 #if UNITY_EDITOR
 	    return GameObjectUtility.GetUniqueNameForSibling(parentTransform, name);
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Displays or updates a progress bar.
-	/// </summary>
-	/// <param name="title">Title of display</param>
-	/// <param name="info">Info on display</param>
-	/// <param name="progress">Progress ratio from 0 to 1</param>
-	/// <returns></returns>
-	public static void DisplayProgressBar(string title, string info, float progress)
-	{
+		/// <summary>
+		/// Displays or updates a progress bar.
+		/// </summary>
+		/// <param name="title">Title of display</param>
+		/// <param name="info">Info on display</param>
+		/// <param name="progress">Progress ratio from 0 to 1</param>
+		/// <returns></returns>
+		public static void DisplayProgressBar(string title, string info, float progress)
+		{
 #if UNITY_EDITOR
 	    EditorUtility.DisplayProgressBar(title, info, progress);
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Removes the progress bar on display
-	/// </summary>
-	public static void ClearProgressBar()
-	{
+		/// <summary>
+		/// Removes the progress bar on display
+		/// </summary>
+		public static void ClearProgressBar()
+		{
 #if UNITY_EDITOR
 	    EditorUtility.ClearProgressBar();
 #else
 			HEU_Logger.LogWarning(HEU_Defines.HEU_USERMSG_NONEDITOR_NOT_SUPPORTED);
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns true if we are in Editor, and we are not in play mode nor going into play mode.
-	/// </summary>
-	public static bool IsEditorNotInPlayModeAndNotGoingToPlayMode()
-	{
+		/// <summary>
+		/// Returns true if we are in Editor, and we are not in play mode nor going into play mode.
+		/// </summary>
+		public static bool IsEditorNotInPlayModeAndNotGoingToPlayMode()
+		{
 #if UNITY_EDITOR
 	    return Application.isEditor && !UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode && (Time.timeSinceLevelLoad > 0 || !Application.isPlaying);
 #else
 			return Application.isEditor && !Application.isPlaying;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Display message boxes in the editor.
-	/// </summary>
-	/// <param name="title"></param>
-	/// <param name="message"></param>
-	/// <param name="ok"></param>
-	/// <param name="cancel"></param>
-	/// <returns>True if OK button is pressed.</returns>
-	public static bool DisplayDialog(string title, string message, string ok, string cancel = "")
-	{
+		/// <summary>
+		/// Display message boxes in the editor.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="message"></param>
+		/// <param name="ok"></param>
+		/// <param name="cancel"></param>
+		/// <returns>True if OK button is pressed.</returns>
+		public static bool DisplayDialog(string title, string message, string ok, string cancel = "")
+		{
 #if UNITY_EDITOR
 	    return EditorUtility.DisplayDialog(title, message, ok, cancel);
 #else
 			HEU_Logger.Log(string.Format("{0}: {1}", title, message));
 			return true;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Display error message boxes in the editor.
-	/// </summary>
-	/// <param name="title"></param>
-	/// <param name="message"></param>
-	/// <param name="ok"></param>
-	/// <param name="cancel"></param>
-	/// <returns>True if OK button is pressed.</returns>
-	public static bool DisplayErrorDialog(string title, string message, string ok, string cancel = "")
-	{
+		/// <summary>
+		/// Display error message boxes in the editor.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="message"></param>
+		/// <param name="ok"></param>
+		/// <param name="cancel"></param>
+		/// <returns>True if OK button is pressed.</returns>
+		public static bool DisplayErrorDialog(string title, string message, string ok, string cancel = "")
+		{
 #if UNITY_EDITOR
 	    return EditorUtility.DisplayDialog(string.Format("{0}: {1}", HEU_Defines.HEU_ERROR_TITLE, title), message, ok, cancel);
 #else
 			HEU_Logger.Log(string.Format("{0}: {1} - {2}", HEU_Defines.HEU_ERROR_TITLE, title, message));
 			return true;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Opens the given file path in OS file explorer.
-	/// </summary>
-	/// <param name="path">Path to open to</param>
-	public static void RevealInFinder(string path)
-	{
+		/// <summary>
+		/// Opens the given file path in OS file explorer.
+		/// </summary>
+		/// <param name="path">Path to open to</param>
+		public static void RevealInFinder(string path)
+		{
 #if UNITY_EDITOR
 	    UnityEditor.EditorUtility.RevealInFinder(path);
 #endif
-	}
+		}
 
 #if UNITY_EDITOR
 	public static SerializedProperty GetSerializedProperty(SerializedObject serializedObject, string propertyName)
@@ -923,26 +923,26 @@ namespace HoudiniEngineUnity
 	}
 #endif
 
-	/// <summary>
-	/// Sets given object to require update in Unity.
-	/// Used for forcing Update/LateUpdate to be called on objects in Editor.
-	/// Only works in Editor currently.
-	/// </summary>
-	/// <param name="obj">Object to set for update</param>
-	public static void SetObjectDirtyForEditorUpdate(Object obj)
-	{
+		/// <summary>
+		/// Sets given object to require update in Unity.
+		/// Used for forcing Update/LateUpdate to be called on objects in Editor.
+		/// Only works in Editor currently.
+		/// </summary>
+		/// <param name="obj">Object to set for update</param>
+		public static void SetObjectDirtyForEditorUpdate(Object obj)
+		{
 #if UNITY_EDITOR
 	    EditorUtility.SetDirty(obj);
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Sets the given gameobject's static state.
-	/// </summary>
-	/// <param name="go">GameObject to set static state on</param>
-	/// <param name="bStatic">Static state to set</param>
-	public static void SetStatic(GameObject go, bool bStatic, bool bIncludeChildren)
-	{
+		/// <summary>
+		/// Sets the given gameobject's static state.
+		/// </summary>
+		/// <param name="go">GameObject to set static state on</param>
+		/// <param name="bStatic">Static state to set</param>
+		public static void SetStatic(GameObject go, bool bStatic, bool bIncludeChildren)
+		{
 #if UNITY_EDITOR
 	    go.isStatic = bStatic;
 	    if (bIncludeChildren)
@@ -954,10 +954,10 @@ namespace HoudiniEngineUnity
 	    }
 	    
 #endif
-	}
+		}
 
-	public static void SetIsHidden(GameObject go, bool isHidden, bool bIncludeChildren)
-	{
+		public static void SetIsHidden(GameObject go, bool isHidden, bool bIncludeChildren)
+		{
 #if UNITY_EDITOR && UNITY_2019_2_OR_NEWER
 	    SceneVisibilityManager visibilityManager = SceneVisibilityManager.instance;
 	    
@@ -970,28 +970,28 @@ namespace HoudiniEngineUnity
 		visibilityManager.Show(go, bIncludeChildren);
 	    }
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Returns array of currently selected gameobjects.
-	/// </summary>
-	/// <returns>Array of currently selected gameobjects</returns>
-	public static GameObject[] GetSelectedObjects()
-	{
+		/// <summary>
+		/// Returns array of currently selected gameobjects.
+		/// </summary>
+		/// <returns>Array of currently selected gameobjects</returns>
+		public static GameObject[] GetSelectedObjects()
+		{
 #if UNITY_EDITOR
 	    return Selection.gameObjects;
 #else
 			return null;
 #endif
-	}
+		}
 
-	/// <summary>
-	/// Get list of user selected Houdini assets root components in the scene.
-	/// </summary>
-	/// <returns>List of selected Houdini asset root components (HEU_HoudiniAssetRoot)</returns>
-	public static HEU_HoudiniAssetRoot[] GetSelectedAssetRoots()
-	{
-	    List<HEU_HoudiniAssetRoot> rootAssets = new List<HEU_HoudiniAssetRoot>();
+		/// <summary>
+		/// Get list of user selected Houdini assets root components in the scene.
+		/// </summary>
+		/// <returns>List of selected Houdini asset root components (HEU_HoudiniAssetRoot)</returns>
+		public static HEU_HoudiniAssetRoot[] GetSelectedAssetRoots()
+		{
+			List<HEU_HoudiniAssetRoot> rootAssets = new List<HEU_HoudiniAssetRoot>();
 #if UNITY_EDITOR
 	    Object[] selectedObjects = Selection.objects;
 	    foreach (Object obj in selectedObjects)
@@ -1007,225 +1007,225 @@ namespace HoudiniEngineUnity
 		}
 	    }
 #endif
-	    return rootAssets.ToArray();
-	}
-
-	/// <summary>
-	/// Get all Houdini asset root components in the scene.
-	/// </summary>
-	/// <returns>List of all Houdini asset root components in the scene (HEU_HoudiniAssetRoot)</returns>
-	public static HEU_HoudiniAssetRoot[] GetAllAssetRoots()
-	{
-	    return GameObject.FindObjectsOfType<HEU_HoudiniAssetRoot>();
-	}
-
-	/// <summary>
-	/// Cook the user selected Houdini assets in the scene.
-	/// </summary>
-	public static void CookSelected()
-	{
-	    CookAssets(GetSelectedAssetRoots());
-	}
-
-	/// <summary>
-	/// Cook all Houdini assets in the scene.
-	/// </summary>
-	public static void CookAll()
-	{
-	    CookAssets(GetAllAssetRoots());
-	}
-
-	/// <summary>
-	/// Cook the given list of Houdini assets in the scene.
-	/// </summary>
-	/// <param name="rootAssets"></param>
-	public static void CookAssets(HEU_HoudiniAssetRoot[] rootAssets)
-	{
-	    if (rootAssets == null || rootAssets.Length == 0)
-	    {
-		return;
-	    }
-
-	    foreach (HEU_HoudiniAssetRoot root in rootAssets)
-	    {
-		if (root._houdiniAsset != null)
-		{
-		    root._houdiniAsset.RequestCook(bCheckParametersChanged: true, bAsync: true, bSkipCookCheck: true, bUploadParameters: true);
+			return rootAssets.ToArray();
 		}
-	    }
-	}
 
-	/// <summary>
-	/// Rebuild (reset, reload and cook) the user selected Houdini assets in the scene.
-	/// </summary>
-	public static void RebuildSelected()
-	{
-	    RebuildAssets(GetSelectedAssetRoots());
-	}
-
-	/// <summary>
-	/// Rebuild (reset, reload and cook) all Houdini assets in the scene.
-	/// </summary>
-	public static void RebuildAll()
-	{
-	    RebuildAssets(GetAllAssetRoots());
-	}
-
-	/// <summary>
-	/// Rebuild (reset, reload and cook) given list of Houdini assets in the scene.
-	/// </summary>
-	/// <param name="rootAssets"></param>
-	public static void RebuildAssets(HEU_HoudiniAssetRoot[] rootAssets)
-	{
-	    if (rootAssets == null || rootAssets.Length == 0)
-	    {
-		return;
-	    }
-
-	    foreach (HEU_HoudiniAssetRoot root in rootAssets)
-	    {
-		if (root._houdiniAsset != null)
+		/// <summary>
+		/// Get all Houdini asset root components in the scene.
+		/// </summary>
+		/// <returns>List of all Houdini asset root components in the scene (HEU_HoudiniAssetRoot)</returns>
+		public static HEU_HoudiniAssetRoot[] GetAllAssetRoots()
 		{
-		    root._houdiniAsset.RequestReload(true);
+			return GameObject.FindObjectsOfType<HEU_HoudiniAssetRoot>();
 		}
-	    }
-	}
 
-	/// <summary>
-	/// Bake out and replace with baked objects the user selected Houdini assets in the scene.
-	/// </summary>
-	public static void BakeAndReplaceSelectedInScene()
-	{
-	    BakeAndReplaceAssets(GetSelectedAssetRoots());
-	}
-
-	/// <summary>
-	/// Bake out and replace with baked objects all Houdini assets in the scene.
-	/// </summary>
-	public static void BakeAndReplaceAllInScene()
-	{
-	    BakeAndReplaceAssets(GetAllAssetRoots());
-	}
-
-	/// <summary>
-	/// Bake out and replace with baked object the given list of Houdini assets in the scene.
-	/// </summary>
-	/// <param name="rootAssets"></param>
-	public static void BakeAndReplaceAssets(HEU_HoudiniAssetRoot[] rootAssets)
-	{
-	    if (rootAssets == null || rootAssets.Length == 0)
-	    {
-		return;
-	    }
-
-	    foreach (HEU_HoudiniAssetRoot root in rootAssets)
-	    {
-		if (root._houdiniAsset != null)
+		/// <summary>
+		/// Cook the user selected Houdini assets in the scene.
+		/// </summary>
+		public static void CookSelected()
 		{
-		    root._houdiniAsset.RequestBakeInPlace();
+			CookAssets(GetSelectedAssetRoots());
 		}
-	    }
-	}
 
-	public static void ExportSelectedAssetsToGeoFiles()
-	{
-	    ExportAssetsToGeoFiles(GetSelectedAssetRoots());
-	}
-
-	public static void ExportAllAssetsToGeoFiles()
-	{
-	    ExportAssetsToGeoFiles(GetAllAssetRoots());
-	}
-
-	public static void ExportAssetsToGeoFiles(HEU_HoudiniAssetRoot[] rootAssets)
-	{
-	    // Open a Dialog to get user settings:
-	    //	-directory to write to
-	    //	-file name with extension (determines file format)
-
-	    string exportExt = "bgeo.sc";
-	    List<HEU_GeoNode> outputGeoNodes = new List<HEU_GeoNode>();
-	    int numNodes = 0;
-
-	    int numAssets = rootAssets.Length;
-	    if (numAssets == 0)
-	    {
-		return;
-	    }
-
-	    string exportDir = EditorSaveFolderPanel("Export Geo to Folder", HEU_PluginSettings.LastExportPath, "");
-	    if (string.IsNullOrEmpty(exportDir))
-	    {
-		return;
-	    }
-
-	    // Save latest folder choice
-	    HEU_PluginSettings.LastExportPath = exportDir;
-
-	    if (string.IsNullOrEmpty(exportExt))
-	    {
-		HEU_Logger.LogErrorFormat("Export extension cannot be empty.");
-		return;
-	    }
-
-	    if (!HEU_Platform.DoesDirectoryExist(exportDir) && HEU_Platform.CreateDirectory(exportDir))
-	    {
-		HEU_Logger.LogErrorFormat("Error creating directory at {0}.", exportDir);
-		return;
-	    }
-
-	    for (int i = 0; i < numAssets; ++i)
-	    {
-		if (rootAssets[i] != null && rootAssets[i]._houdiniAsset != null)
+		/// <summary>
+		/// Cook all Houdini assets in the scene.
+		/// </summary>
+		public static void CookAll()
 		{
-		    HEU_HoudiniAsset asset = rootAssets[i]._houdiniAsset;
+			CookAssets(GetAllAssetRoots());
+		}
 
-		    HEU_SessionBase session = asset.GetAssetSession(true);
-		    if (session == null || !session.IsSessionValid())
-		    {
-			continue;
-		    }
-
-		    if (string.IsNullOrEmpty(asset.AssetName))
-		    {
-			HEU_Logger.LogErrorFormat("Unable to export output of asset at {0} due to empty name.", asset.AssetPath);
-			continue;
-		    }
-
-		    outputGeoNodes.Clear();
-		    asset.GetOutputGeoNodes(outputGeoNodes);
-
-		    numNodes = outputGeoNodes.Count;
-		    for (int j = 0; j < numNodes; ++j)
-		    {
-			string exportPath = string.Format("{0}/{1}_{2}.{3}", exportDir, asset.RootGameObject.name, outputGeoNodes[j].GeoName, exportExt);
-
-			if (!session.SaveGeoToFile(outputGeoNodes[j].GeoID, exportPath))
+		/// <summary>
+		/// Cook the given list of Houdini assets in the scene.
+		/// </summary>
+		/// <param name="rootAssets"></param>
+		public static void CookAssets(HEU_HoudiniAssetRoot[] rootAssets)
+		{
+			if (rootAssets == null || rootAssets.Length == 0)
 			{
-			    HEU_Logger.LogErrorFormat("Failed to export output geo of asset with path: {0}", exportPath);
+				return;
 			}
-			else
+
+			foreach (HEU_HoudiniAssetRoot root in rootAssets)
 			{
-			    HEU_Logger.LogFormat("Exported output geo {0} of {1} at: {2}", outputGeoNodes[j].GeoName, asset.RootGameObject.name, exportPath);
+				if (root._houdiniAsset != null)
+				{
+					root._houdiniAsset.RequestCook(bCheckParametersChanged: true, bAsync: true, bSkipCookCheck: true, bUploadParameters: true);
+				}
 			}
-		    }
 		}
-	    }
-	}
+
+		/// <summary>
+		/// Rebuild (reset, reload and cook) the user selected Houdini assets in the scene.
+		/// </summary>
+		public static void RebuildSelected()
+		{
+			RebuildAssets(GetSelectedAssetRoots());
+		}
+
+		/// <summary>
+		/// Rebuild (reset, reload and cook) all Houdini assets in the scene.
+		/// </summary>
+		public static void RebuildAll()
+		{
+			RebuildAssets(GetAllAssetRoots());
+		}
+
+		/// <summary>
+		/// Rebuild (reset, reload and cook) given list of Houdini assets in the scene.
+		/// </summary>
+		/// <param name="rootAssets"></param>
+		public static void RebuildAssets(HEU_HoudiniAssetRoot[] rootAssets)
+		{
+			if (rootAssets == null || rootAssets.Length == 0)
+			{
+				return;
+			}
+
+			foreach (HEU_HoudiniAssetRoot root in rootAssets)
+			{
+				if (root._houdiniAsset != null)
+				{
+					root._houdiniAsset.RequestReload(true);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Bake out and replace with baked objects the user selected Houdini assets in the scene.
+		/// </summary>
+		public static void BakeAndReplaceSelectedInScene()
+		{
+			BakeAndReplaceAssets(GetSelectedAssetRoots());
+		}
+
+		/// <summary>
+		/// Bake out and replace with baked objects all Houdini assets in the scene.
+		/// </summary>
+		public static void BakeAndReplaceAllInScene()
+		{
+			BakeAndReplaceAssets(GetAllAssetRoots());
+		}
+
+		/// <summary>
+		/// Bake out and replace with baked object the given list of Houdini assets in the scene.
+		/// </summary>
+		/// <param name="rootAssets"></param>
+		public static void BakeAndReplaceAssets(HEU_HoudiniAssetRoot[] rootAssets)
+		{
+			if (rootAssets == null || rootAssets.Length == 0)
+			{
+				return;
+			}
+
+			foreach (HEU_HoudiniAssetRoot root in rootAssets)
+			{
+				if (root._houdiniAsset != null)
+				{
+					root._houdiniAsset.RequestBakeInPlace();
+				}
+			}
+		}
+
+		public static void ExportSelectedAssetsToGeoFiles()
+		{
+			ExportAssetsToGeoFiles(GetSelectedAssetRoots());
+		}
+
+		public static void ExportAllAssetsToGeoFiles()
+		{
+			ExportAssetsToGeoFiles(GetAllAssetRoots());
+		}
+
+		public static void ExportAssetsToGeoFiles(HEU_HoudiniAssetRoot[] rootAssets)
+		{
+			// Open a Dialog to get user settings:
+			//	-directory to write to
+			//	-file name with extension (determines file format)
+
+			string exportExt = "bgeo.sc";
+			List<HEU_GeoNode> outputGeoNodes = new List<HEU_GeoNode>();
+			int numNodes = 0;
+
+			int numAssets = rootAssets.Length;
+			if (numAssets == 0)
+			{
+				return;
+			}
+
+			string exportDir = EditorSaveFolderPanel("Export Geo to Folder", HEU_PluginSettings.LastExportPath, "");
+			if (string.IsNullOrEmpty(exportDir))
+			{
+				return;
+			}
+
+			// Save latest folder choice
+			HEU_PluginSettings.LastExportPath = exportDir;
+
+			if (string.IsNullOrEmpty(exportExt))
+			{
+				HEU_Logger.LogErrorFormat("Export extension cannot be empty.");
+				return;
+			}
+
+			if (!HEU_Platform.DoesDirectoryExist(exportDir) && HEU_Platform.CreateDirectory(exportDir))
+			{
+				HEU_Logger.LogErrorFormat("Error creating directory at {0}.", exportDir);
+				return;
+			}
+
+			for (int i = 0; i < numAssets; ++i)
+			{
+				if (rootAssets[i] != null && rootAssets[i]._houdiniAsset != null)
+				{
+					HEU_HoudiniAsset asset = rootAssets[i]._houdiniAsset;
+
+					HEU_SessionBase session = asset.GetAssetSession(true);
+					if (session == null || !session.IsSessionValid())
+					{
+						continue;
+					}
+
+					if (string.IsNullOrEmpty(asset.AssetName))
+					{
+						HEU_Logger.LogErrorFormat("Unable to export output of asset at {0} due to empty name.", asset.AssetPath);
+						continue;
+					}
+
+					outputGeoNodes.Clear();
+					asset.GetOutputGeoNodes(outputGeoNodes);
+
+					numNodes = outputGeoNodes.Count;
+					for (int j = 0; j < numNodes; ++j)
+					{
+						string exportPath = string.Format("{0}/{1}_{2}.{3}", exportDir, asset.RootGameObject.name, outputGeoNodes[j].GeoName, exportExt);
+
+						if (!session.SaveGeoToFile(outputGeoNodes[j].GeoID, exportPath))
+						{
+							HEU_Logger.LogErrorFormat("Failed to export output geo of asset with path: {0}", exportPath);
+						}
+						else
+						{
+							HEU_Logger.LogFormat("Exported output geo {0} of {1} at: {2}", outputGeoNodes[j].GeoName, asset.RootGameObject.name, exportPath);
+						}
+					}
+				}
+			}
+		}
 
 
-	public static string EditorSaveFolderPanel(string title, string folder, string defaultName)
-	{
+		public static string EditorSaveFolderPanel(string title, string folder, string defaultName)
+		{
 #if UNITY_EDITOR
 	    return EditorUtility.SaveFolderPanel(title, folder, defaultName);
 #else
 			HEU_Logger.LogWarning("Save to Folder is only supported in Editor mode.");
 			return null;
 #endif
-	}
+		}
 
-	public static void QuerySelectedMeshTopology()
-	{
+		public static void QuerySelectedMeshTopology()
+		{
 #if UNITY_EDITOR
 	    GameObject[] gos = Selection.gameObjects;
 	    if (gos == null || gos.Length == 0)
@@ -1252,13 +1252,13 @@ namespace HoudiniEngineUnity
 		}
 	    }
 #endif
-	}
+		}
 
-	// Gets the object parent folder for meshes, materials, or terrains
-	// Skips material paths that are not in generatedMaterials
-	public static string GetObjectParentFolder(GameObject parentObject, HashSet<Material> generatedMaterials)
-	{
-	    string targetAssetPath = "";
+		// Gets the object parent folder for meshes, materials, or terrains
+		// Skips material paths that are not in generatedMaterials
+		public static string GetObjectParentFolder(GameObject parentObject, HashSet<Material> generatedMaterials)
+		{
+			string targetAssetPath = "";
 #if UNITY_EDITOR
 	    List<string> possiblePaths = new List<string>();
 
@@ -1325,12 +1325,12 @@ namespace HoudiniEngineUnity
 	    }
 #endif
 
-	    return targetAssetPath;
-	}
+			return targetAssetPath;
+		}
 
-	private static string GetObjectParentFolderHelper(int instanceID)
-	{
-	    string targetAssetPath = "";
+		private static string GetObjectParentFolderHelper(int instanceID)
+		{
+			string targetAssetPath = "";
 #if UNITY_EDITOR
 	    string currentObjectPath = AssetDatabase.GetAssetPath(instanceID);
 	    if (HEU_Platform.DoesFileExist(currentObjectPath))
@@ -1343,11 +1343,11 @@ namespace HoudiniEngineUnity
 	        }
 	    }
 #endif
-	    return targetAssetPath;
-	}
+			return targetAssetPath;
+		}
 
-	public static void RepaintScene()
-	{
+		public static void RepaintScene()
+		{
 #if UNITY_EDITOR
 	    EditorWindow view = EditorWindow.GetWindow<SceneView>();
 	    if (view != null)
@@ -1355,26 +1355,26 @@ namespace HoudiniEngineUnity
 		view.Repaint();
 	    }
 #endif
-	}
+		}
 
-	public static void SetTextureToNormalMap(string filename)
-	{
+		public static void SetTextureToNormalMap(string filename)
+		{
 #if UNITY_EDITOR && UNITY_2018_4_OR_NEWER
 	    TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath(filename);
 	    importer.textureType = TextureImporterType.NormalMap;
 	    EditorUtility.SetDirty(importer);
 	    importer.SaveAndReimport();
 #endif
-	}
+		}
 
-	public static bool ReleasedMouse()
-	{
-	    bool result = true;
+		public static bool ReleasedMouse()
+		{
+			bool result = true;
 #if UNITY_EDITOR
 	    result = (EditorGUIUtility.hotControl == 0);
 #endif
-	    return result;
-	}
+			return result;
+		}
 
 #if UNITY_EDITOR
 	public static void EnumToPopup(SerializedProperty property, string name, int currentEnumValue, string [] enumNames, bool bAddOneToEnumIndex,  string tooltip = "", System.Action<int> onChangeEnumValue = null)
@@ -1402,6 +1402,6 @@ namespace HoudiniEngineUnity
 	}
 #endif
 
-    }
+	}
 
 }   // HoudiniEngineUnity

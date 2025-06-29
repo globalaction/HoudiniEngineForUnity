@@ -29,70 +29,70 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Contains the SessionSync local state information for Unity plugin.
-    /// The HEU_SesionSyncWindow uses the data stored here.
-    /// This is stored as part of the Houdini Engine data (HEU_SessionData)
-    /// when SessionSync is active.
-    /// </summary>
-    [System.Serializable]
-    public class HEU_SessionSyncData
-    {
-	public enum Status
+	/// <summary>
+	/// Contains the SessionSync local state information for Unity plugin.
+	/// The HEU_SesionSyncWindow uses the data stored here.
+	/// This is stored as part of the Houdini Engine data (HEU_SessionData)
+	/// when SessionSync is active.
+	/// </summary>
+	[System.Serializable]
+	public class HEU_SessionSyncData
 	{
-	    Stopped,
-	    Started,
-	    Connecting,
-	    Initializing,
-	    Connected
+		public enum Status
+		{
+			Stopped,
+			Started,
+			Connecting,
+			Initializing,
+			Connected
+		}
+
+		// The SessionSync state for local session
+		[SerializeField]
+		private int _status = 0;
+
+		// The time since last update
+		public float _timeLastUpdate = 0;
+
+		// The time when connecting to Houdini was started (used for timing out)
+		public float _timeStartConnection = 0;
+
+		// Thread-safe access to _status
+		public Status SyncStatus
+		{
+			get
+			{
+				int istatus = Interlocked.CompareExchange(ref _status, 0, 0);
+				return (Status)istatus;
+			}
+			set
+			{
+				int istatus = (int)value;
+				Interlocked.Exchange(ref _status, istatus);
+			}
+		}
+
+		// UI name for new node
+		public string _newNodeName = "geo1";
+
+		// UI index of node type
+		public int _nodeTypeIndex = 0;
+
+		// Flag to disregard this object due to Unity serialization
+		// automatically creating it on code donmain reload
+		public bool _validForConnection;
+
+		// The last HAPI_Viewport update from HAPI
+		public HAPI_Viewport _viewportHAPI = new HAPI_Viewport(true);
+
+		// The last HAPI_Viewport update from local 
+		public HAPI_Viewport _viewportLocal = new HAPI_Viewport(true);
+
+		// Whether the viewport was just update locally
+		public bool _viewportJustUpdated;
+
+		// The last HAPI_SessionSyncInfo update
+		public HAPI_SessionSyncInfo _syncInfo = new HAPI_SessionSyncInfo();
 	}
-
-	// The SessionSync state for local session
-	[SerializeField]
-	private int _status = 0;
-
-	// The time since last update
-	public float _timeLastUpdate = 0;
-
-	// The time when connecting to Houdini was started (used for timing out)
-	public float _timeStartConnection = 0;
-
-	// Thread-safe access to _status
-	public Status SyncStatus
-	{
-	    get
-	    {
-		int istatus = Interlocked.CompareExchange(ref _status, 0, 0);
-		return (Status)istatus;
-	    }
-	    set
-	    {
-		int istatus = (int)value;
-		Interlocked.Exchange(ref _status, istatus);
-	    }
-	}
-
-	// UI name for new node
-	public string _newNodeName = "geo1";
-
-	// UI index of node type
-	public int _nodeTypeIndex = 0;
-
-	// Flag to disregard this object due to Unity serialization
-	// automatically creating it on code donmain reload
-	public bool _validForConnection;
-
-	// The last HAPI_Viewport update from HAPI
-	public HAPI_Viewport _viewportHAPI = new HAPI_Viewport(true);
-
-	// The last HAPI_Viewport update from local 
-	public HAPI_Viewport _viewportLocal = new HAPI_Viewport(true);
-
-	// Whether the viewport was just update locally
-	public bool _viewportJustUpdated;
-
-	// The last HAPI_SessionSyncInfo update
-	public HAPI_SessionSyncInfo _syncInfo = new HAPI_SessionSyncInfo();
-    }
 
 }

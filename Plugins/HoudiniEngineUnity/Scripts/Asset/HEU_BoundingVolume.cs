@@ -34,43 +34,43 @@ using UnityEngine;
 /// </summary>
 public class HEU_BoundingVolume : MonoBehaviour
 {
-    /// <summary>
-    /// The bounding collider
-    /// </summary>
-    public Collider BoundingCollider {get  { return GetComponent<Collider>(); }}
+	/// <summary>
+	/// The bounding collider
+	/// </summary>
+	public Collider BoundingCollider { get { return GetComponent<Collider>(); } }
 
 
-    /// <summary>
-    /// Gets all intersecting objects in the bounding collider
-    /// <returns>A list of all intersecting objects</returns>
-    /// </summary>
-    public List<GameObject> GetAllIntersectingObjects()
-    {
-	if (BoundingCollider == null)
+	/// <summary>
+	/// Gets all intersecting objects in the bounding collider
+	/// <returns>A list of all intersecting objects</returns>
+	/// </summary>
+	public List<GameObject> GetAllIntersectingObjects()
 	{
-	    return null;
+		if (BoundingCollider == null)
+		{
+			return null;
+		}
+
+		List<GameObject> intersectingObjects = new List<GameObject>();
+		GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+		foreach (GameObject obj in allObjects)
+		{
+			if (obj == this.gameObject)
+			{
+				continue;
+			}
+
+			if (!obj.GetComponent<Collider>())
+			{
+				continue;
+			}
+
+			if (BoundingCollider.bounds.Intersects(obj.GetComponent<Collider>().bounds))
+			{
+				intersectingObjects.Add(obj);
+			}
+		}
+
+		return intersectingObjects;
 	}
-
-	List<GameObject> intersectingObjects = new List<GameObject>();
-	GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-	foreach (GameObject obj in allObjects)
-	{
-	    if (obj == this.gameObject)
-	    {
-		continue;
-	    }
-
-	    if (!obj.GetComponent<Collider>())
-	    {
-		continue;
-	    }
-
-	    if (BoundingCollider.bounds.Intersects(obj.GetComponent<Collider>().bounds))
-	    {
-	        intersectingObjects.Add(obj);
-	    }
-	}
-
-	return intersectingObjects;
-    }
 }

@@ -31,175 +31,175 @@ using UnityEngine;
 
 namespace HoudiniEngineUnity
 {
-    /// <summary>
-    /// Base class for all Houdini Engine Unity tasks.
-    /// </summary>
-    public abstract class HEU_Task
-    {
-	public enum TaskStatus
+	/// <summary>
+	/// Base class for all Houdini Engine Unity tasks.
+	/// </summary>
+	public abstract class HEU_Task
 	{
-	    NONE,
-	    PENDING_START,
-	    STARTED,
-	    REQUIRE_UPDATE,
-	    PENDING_COMPLETE,
-	    COMPLETED,
-	    UNUSED
-	}
-	public TaskStatus _status;
-
-	public enum TaskResult
-	{
-	    NONE,
-	    SUCCESS,
-	    FAILED,
-	    KILLED
-	}
-	public TaskResult _result;
-
-	private System.Guid _guid;
-	public System.Guid TaskGuid { get { return _guid; } }
-
-	public HEU_Task()
-	{
-	    _guid = System.Guid.NewGuid();
-	}
-
-	public delegate void TaskCallback(HEU_Task task);
-
-	public TaskCallback _taskCompletedDelegate;
-
-	public abstract void DoTask();
-
-	public virtual void UpdateTask() { }
-
-	public abstract void KillTask();
-
-	public abstract void CompleteTask(TaskResult result);
-    }
-
-
-    /// <summary>
-    /// Asset-specific class for Houdini Engine Unity tasks.
-    /// </summary>
-    public class HEU_AssetTask : HEU_Task
-    {
-	public enum BuildType
-	{
-	    NONE,
-	    LOAD,
-	    COOK,
-	    RELOAD
-	}
-	public BuildType _buildType;
-
-	public HEU_HoudiniAsset _asset;
-
-	public string _assetPath;
-
-	public Vector3 _position = Vector3.zero;
-
-	public bool _buildResult;
-
-	public long _forceSessionID = HEU_SessionData.INVALID_SESSION_ID;
-
-	public HEU_SessionBase GetTaskSession()
-	{
-	    if (_forceSessionID == HEU_SessionData.INVALID_SESSION_ID)
-	    {
-		return HEU_SessionManager.GetOrCreateDefaultSession();
-	    }
-	    else
-	    {
-		return HEU_SessionManager.GetSessionWithID(_forceSessionID);
-	    }
-	}
-
-
-	public override void DoTask()
-	{
-	    if (_buildType == BuildType.LOAD)
-	    {
-		if (string.IsNullOrEmpty(_assetPath))
+		public enum TaskStatus
 		{
-		    // Bad path so fail		
-		    HEU_TaskManager.CompleteTask(this, TaskResult.FAILED);
+			NONE,
+			PENDING_START,
+			STARTED,
+			REQUIRE_UPDATE,
+			PENDING_COMPLETE,
+			COMPLETED,
+			UNUSED
 		}
-		else
+		public TaskStatus _status;
+
+		public enum TaskResult
 		{
-		    // File-based HDA
-		    GameObject newGO = HEU_HAPIUtility.InstantiateHDA(_assetPath, _position, GetTaskSession(), true);
-		    if (newGO != null && newGO.GetComponent<HEU_HoudiniAssetRoot>() != null)
-		    {
-			// Add to post-load callback
-			_asset = newGO.GetComponent<HEU_HoudiniAssetRoot>()._houdiniAsset;
-			_asset.ReloadDataEvent.AddListener(CookCompletedCallback);
-		    }
-		    else
-		    {
-			HEU_TaskManager.CompleteTask(this, TaskResult.FAILED);
-		    }
+			NONE,
+			SUCCESS,
+			FAILED,
+			KILLED
 		}
-	    }
-	    else if (_buildType == BuildType.COOK)
-	    {
-		_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
-		_asset.CookedDataEvent.AddListener(CookCompletedCallback);
-		_asset.RequestCook(true, true, false, true);
-	    }
-	    else if (_buildType == BuildType.RELOAD)
-	    {
-		_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
-		_asset.ReloadDataEvent.AddListener(CookCompletedCallback);
-		_asset.RequestReload(true);
-	    }
+		public TaskResult _result;
+
+		private System.Guid _guid;
+		public System.Guid TaskGuid { get { return _guid; } }
+
+		public HEU_Task()
+		{
+			_guid = System.Guid.NewGuid();
+		}
+
+		public delegate void TaskCallback(HEU_Task task);
+
+		public TaskCallback _taskCompletedDelegate;
+
+		public abstract void DoTask();
+
+		public virtual void UpdateTask() { }
+
+		public abstract void KillTask();
+
+		public abstract void CompleteTask(TaskResult result);
 	}
 
-	public override void KillTask()
+
+	/// <summary>
+	/// Asset-specific class for Houdini Engine Unity tasks.
+	/// </summary>
+	public class HEU_AssetTask : HEU_Task
 	{
-	    if (_asset != null)
-	    {
-		_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
-		_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
-	    }
+		public enum BuildType
+		{
+			NONE,
+			LOAD,
+			COOK,
+			RELOAD
+		}
+		public BuildType _buildType;
+
+		public HEU_HoudiniAsset _asset;
+
+		public string _assetPath;
+
+		public Vector3 _position = Vector3.zero;
+
+		public bool _buildResult;
+
+		public long _forceSessionID = HEU_SessionData.INVALID_SESSION_ID;
+
+		public HEU_SessionBase GetTaskSession()
+		{
+			if (_forceSessionID == HEU_SessionData.INVALID_SESSION_ID)
+			{
+				return HEU_SessionManager.GetOrCreateDefaultSession();
+			}
+			else
+			{
+				return HEU_SessionManager.GetSessionWithID(_forceSessionID);
+			}
+		}
+
+
+		public override void DoTask()
+		{
+			if (_buildType == BuildType.LOAD)
+			{
+				if (string.IsNullOrEmpty(_assetPath))
+				{
+					// Bad path so fail		
+					HEU_TaskManager.CompleteTask(this, TaskResult.FAILED);
+				}
+				else
+				{
+					// File-based HDA
+					GameObject newGO = HEU_HAPIUtility.InstantiateHDA(_assetPath, _position, GetTaskSession(), true);
+					if (newGO != null && newGO.GetComponent<HEU_HoudiniAssetRoot>() != null)
+					{
+						// Add to post-load callback
+						_asset = newGO.GetComponent<HEU_HoudiniAssetRoot>()._houdiniAsset;
+						_asset.ReloadDataEvent.AddListener(CookCompletedCallback);
+					}
+					else
+					{
+						HEU_TaskManager.CompleteTask(this, TaskResult.FAILED);
+					}
+				}
+			}
+			else if (_buildType == BuildType.COOK)
+			{
+				_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
+				_asset.CookedDataEvent.AddListener(CookCompletedCallback);
+				_asset.RequestCook(true, true, false, true);
+			}
+			else if (_buildType == BuildType.RELOAD)
+			{
+				_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
+				_asset.ReloadDataEvent.AddListener(CookCompletedCallback);
+				_asset.RequestReload(true);
+			}
+		}
+
+		public override void KillTask()
+		{
+			if (_asset != null)
+			{
+				_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
+				_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
+			}
+		}
+
+		public override void CompleteTask(TaskResult result)
+		{
+			if (_asset != null)
+			{
+				_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
+				_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
+			}
+		}
+
+		private void CookCompletedCallback(HEU_HoudiniAsset asset, bool bSuccess, List<GameObject> outputs)
+		{
+			if (_status == HEU_Task.TaskStatus.STARTED)
+			{
+				HEU_TaskManager.CompleteTask(this, bSuccess ? TaskResult.SUCCESS : TaskResult.FAILED);
+			}
+		}
+		private void CookCompletedCallback(HEU_CookedEventData cookedEventData)
+		{
+			if (cookedEventData == null)
+			{
+				return;
+			}
+
+			CookCompletedCallback(cookedEventData.Asset, cookedEventData.CookSuccess, cookedEventData.OutputObjects);
+		}
+
+		private void CookCompletedCallback(HEU_ReloadEventData reloadEventData)
+		{
+			if (reloadEventData == null)
+			{
+				return;
+			}
+
+			CookCompletedCallback(reloadEventData.Asset, reloadEventData.CookSuccess, reloadEventData.OutputObjects);
+		}
+
 	}
-
-	public override void CompleteTask(TaskResult result)
-	{
-	    if (_asset != null)
-	    {
-		_asset.ReloadDataEvent.RemoveListener(CookCompletedCallback);
-		_asset.CookedDataEvent.RemoveListener(CookCompletedCallback);
-	    }
-	}
-
-	private void CookCompletedCallback(HEU_HoudiniAsset asset, bool bSuccess, List<GameObject> outputs)
-	{
-	    if (_status == HEU_Task.TaskStatus.STARTED)
-	    {
-		HEU_TaskManager.CompleteTask(this, bSuccess ? TaskResult.SUCCESS : TaskResult.FAILED);
-	    }
-	}
-	private void CookCompletedCallback(HEU_CookedEventData cookedEventData)
-	{
-	    if (cookedEventData == null)
-	    {
-		return;
-	    }
-
-	    CookCompletedCallback(cookedEventData.Asset, cookedEventData.CookSuccess, cookedEventData.OutputObjects);
-	}
-
-	private void CookCompletedCallback(HEU_ReloadEventData reloadEventData)
-	{
-	    if (reloadEventData == null)
-	    {
-		return;
-	    }
-
-	    CookCompletedCallback(reloadEventData.Asset, reloadEventData.CookSuccess, reloadEventData.OutputObjects);
-	}
-
-    }
 
 }   // HoudiniEngineUnity

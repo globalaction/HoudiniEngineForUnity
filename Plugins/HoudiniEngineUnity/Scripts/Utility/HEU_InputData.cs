@@ -34,7 +34,7 @@ namespace HoudiniEngineUnity
     /// </summary>
     public class HEU_InputData
     {
-	public GameObject _inputObject;
+        public GameObject _inputObject;
     }
 
 }   // HoudiniEngineUnity
